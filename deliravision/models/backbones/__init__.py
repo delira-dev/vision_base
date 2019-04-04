@@ -7,3 +7,4 @@ if "TORCH" in __get_backends():
     from .alexnet import AlexNetTorch
     from .squeezenet import SqueezeNetTorch
     from .densenet import DenseNetTorch
+    from .mobilenet import MobileNetV2Torch

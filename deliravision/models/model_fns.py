@@ -2,12 +2,13 @@
 from delira import get_backends
 
 if "TORCH" in get_backends():
-    from .backends.resnet import ResNetTorch as ResNet, \
+    from .backbones.resnet import ResNetTorch as ResNet, \
         BasicBlockTorch as BasicBlock, BottleneckTorch as Bottleneck
-    from .backends.vgg import VGGTorch as VGG
-    from .backends.alexnet import AlexNetTorch as AlexNet
-    from .backends.squeezenet import SqueezeNetTorch
-    from .backends.densenet import DenseNetTorch
+    from .backbones.vgg import VGGTorch as VGG
+    from .backbones.alexnet import AlexNetTorch as AlexNet
+    from .backbones.squeezenet import SqueezeNetTorch
+    from .backbones.densenet import DenseNetTorch
+    from .backbones.mobilenet import MobileNetV2Torch
 
     RESNET_CONFIGS = {
         '18': {"block": BasicBlock, "layers": [2, 2, 2, 2]},
@@ -197,3 +198,9 @@ if "TORCH" in get_backends():
         return create_densenet_torch(201, bn_size=bn_size, drop_rate=drop_rate,
                                      num_classes=num_classes, n_dim=n_dim,
                                      pool_type=pool_type, norm_type=norm_type)
+
+    def mobilenet_v2_torch(num_classes=1000, width_mult=1.0, n_dim=2,
+                           norm_type="Batch"):
+        return MobileNetV2Torch(num_classes=num_classes,
+                                width_mult=width_mult, n_dim=n_dim,
+                                norm_type=norm_type)
