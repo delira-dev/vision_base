@@ -11,7 +11,11 @@ if "TORCH" in __get_backends():
         TorchVisionFashionMNIST, TorchVisionImageNet, TorchVisionKMNIST, \
         TorchVisionLSUN, TorchVisionMNIST, TorchVisionSTL10, TorchVisionSVHN
 
+    from .imagenette import ImageNette, ImageWoof
+
     __all__ += [
+        'ImageNette',
+        'ImageWoof',
         'TorchVisionCIFAR10',
         'TorchVisionCIFAR100',
         'TorchVisionClassificationDataset',
