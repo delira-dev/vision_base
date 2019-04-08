@@ -13,11 +13,15 @@ if "TORCH" in __get_backends():
 
     from .imagenette import ImageNette, ImageWoof
 
+    from .torchvision_segmentation import TorchVisionSegmentationDataset, \
+        TorchVisionCityScapes, TorchVisionVOCSegmentation
+
     __all__ += [
         'ImageNette',
         'ImageWoof',
         'TorchVisionCIFAR10',
         'TorchVisionCIFAR100',
+        'TorchVisionCityScapes',
         'TorchVisionClassificationDataset',
         'TorchVisionDatasetFolder',
         'TorchVisionEMNIST',
@@ -28,6 +32,8 @@ if "TORCH" in __get_backends():
         'TorchVisionKMNIST',
         'TorchVisionLSUN',
         'TorchVisionMNIST',
+        'TorchVisionSegmentationDataset',
         'TorchVisionSTL10',
-        'TorchVisionSVHN'
+        'TorchVisionSVHN',
+        'TorchVisionVocSegmentation'
     ]
