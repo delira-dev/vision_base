@@ -1,1 +1,1 @@
-# delira_models
+# delira-vision
