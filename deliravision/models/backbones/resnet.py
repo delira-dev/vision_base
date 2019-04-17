@@ -1,4 +1,5 @@
 from delira import get_backends
+import copy
 
 if "TORCH" in get_backends():
     import torch
@@ -99,23 +100,25 @@ if "TORCH" in get_backends():
     class ResNetTorch(torch.nn.Module):
 
         def __init__(self, block, layers, num_classes=1000, in_channels=3,
-                     zero_init_residual=False, norm_layer=None, n_dim=2):
+                     zero_init_residual=False, norm_layer=None, n_dim=2,
+                     start_filts=64):
             super().__init__()
             if norm_layer is None:
                 norm_layer = "Batch"
-            self.inplanes = 64
-            self.conv1 = ConvNdTorch(n_dim, in_channels, 64, kernel_size=7,
-                                     stride=2, padding=3, bias=False)
+            self.start_filts = start_filts
+            self.inplanes = copy.copy(start_filts)
+            self.conv1 = ConvNdTorch(n_dim, in_channels, self.inplanes,
+                                     kernel_size=7, stride=2, padding=3,
+                                     bias=False)
 
-            self.bn1 = NormNdTorch(norm_layer, n_dim, 64)
+            self.bn1 = NormNdTorch(norm_layer, n_dim, self.inplanes)
             self.relu = torch.nn.ReLU(inplace=True)
-            self.maxpool = PoolingNdTorch("Max", 2, kernel_size=3, stride=2,
-                                          padding=1)
+            self.maxpool = PoolingNdTorch("Max", n_dim=n_dim, kernel_size=3,
+                                          stride=2, padding=1)
 
             num_layers = 0
-
             for idx, _layers in enumerate(layers):
-                planes = min(64*pow(2, idx), 512)
+                planes = min(self.start_filts*pow(2, idx), self.start_filts*8)
                 _local_layer = self._make_layer(block, planes, _layers,
                                                 norm_layer=norm_layer,
                                                 n_dim=n_dim)
@@ -126,7 +129,7 @@ if "TORCH" in get_backends():
             self.num_layers = num_layers
 
             self.avgpool = PoolingNdTorch("AdaptiveAvg", n_dim, 1)
-            self.fc = torch.nn.Linear(512 * block.expansion, num_classes)
+            self.fc = torch.nn.Linear(self.inplanes, num_classes)
 
             for m in self.modules():
                 if isinstance(m, ConvNdTorch):
@@ -173,17 +176,16 @@ if "TORCH" in get_backends():
 
             return torch.nn.Sequential(*layers)
 
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
+        def forward(self, x):
+            x = self.conv1(x)
+            x = self.bn1(x)
+            x = self.relu(x)
+            x = self.maxpool(x)
 
-        for i in range(self.num_layers):
-            x = getattr(self, "layer%d" % (i+1))(x)
+            for i in range(self.num_layers):
+                x = getattr(self, "layer%d" % (i+1))(x)
 
-        x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
-
-        return x
+            x = self.avgpool(x)
+            x = x.view(x.size(0), -1)
+            x = self.fc(x)
+            return x
