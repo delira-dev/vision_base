@@ -21,10 +21,8 @@ if "TORCH" in get_backends():
         expansion = 1
 
         def __init__(self, inplanes, planes, stride=1, downsample=None,
-                     norm_layer=None, n_dim=2):
+                     norm_layer="Batch", n_dim=2):
             super().__init__()
-            if norm_layer is None:
-                norm_layer = "Batch"
             # Both self.conv1 and self.downsample layers downsample the input
             # when stride != 1
             self.conv1 = conv3x3(inplanes, planes, stride, n_dim=n_dim)
@@ -59,10 +57,8 @@ if "TORCH" in get_backends():
         expansion = 4
 
         def __init__(self, inplanes, planes, stride=1, downsample=None,
-                     norm_layer=None, n_dim=2):
+                     norm_layer="Batch", n_dim=2):
             super().__init__()
-            if norm_layer is None:
-                norm_layer = "Batch"
             # Both self.conv2 and self.downsample layers downsample the input when stride != 1
             self.conv1 = conv1x1(inplanes, planes, n_dim=n_dim)
             self.bn1 = NormNdTorch(norm_layer, n_dim, planes)
@@ -98,13 +94,10 @@ if "TORCH" in get_backends():
 
 
     class ResNetTorch(torch.nn.Module):
-
         def __init__(self, block, layers, num_classes=1000, in_channels=3,
-                     zero_init_residual=False, norm_layer=None, n_dim=2,
+                     zero_init_residual=False, norm_layer="Batch", n_dim=2,
                      start_filts=64):
             super().__init__()
-            if norm_layer is None:
-                norm_layer = "Batch"
             self.start_filts = start_filts
             self.inplanes = copy.copy(start_filts)
             self.conv1 = ConvNdTorch(n_dim, in_channels, self.inplanes,
@@ -155,10 +148,8 @@ if "TORCH" in get_backends():
                     elif isinstance(m, BasicBlockTorch):
                         torch.nn.init.constant_(m._norm.weight, 0)
 
-        def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None,
+        def _make_layer(self, block, planes, blocks, stride=1, norm_layer="Batch",
                         n_dim=2):
-            if norm_layer is None:
-                norm_layer = "Batch"
             downsample = None
             if stride != 1 or self.inplanes != planes * block.expansion:
                 downsample = torch.nn.Sequential(
