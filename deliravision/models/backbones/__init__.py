@@ -8,3 +8,6 @@ if "TORCH" in __get_backends():
     from .squeezenet import SqueezeNetTorch
     from .densenet import DenseNetTorch
     from .mobilenet import MobileNetV2Torch
+    from .resnext import ResNeXtTorch
+    from .seblocks import SEBasicBlockTorch, SEBottleneckTorch, \
+        SEBottleneckXTorch

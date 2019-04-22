@@ -4,7 +4,6 @@ if "TORCH" in get_backends():
 
     import torch
 
-
     class ConvWrapper(torch.nn.Module):
         """
         Convolution Wrapper to Switch accross dimensions and transposed by a
@@ -30,7 +29,7 @@ if "TORCH" in get_backends():
         """
         def __init__(self, n_dim, in_channels, out_channels, kernel_size,
                      stride=1, padding=0, dilation=1, groups=1, bias=True,
-                     transposed=False):
+                     transposed=False, **kwargs):
             """
 
             Parameters
@@ -71,7 +70,7 @@ if "TORCH" in get_backends():
             self._conv = conv_cls(
                 in_channels=in_channels, out_channels=out_channels,
                 kernel_size=kernel_size, stride=stride, padding=padding,
-                dilation=dilation, groups=groups, bias=bias)
+                dilation=dilation, groups=groups, bias=bias, **kwargs)
 
         def forward(self, x: torch.Tensor):
             """
