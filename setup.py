@@ -50,7 +50,7 @@ deliravision_version = find_version(os.path.join(os.path.dirname(__file__),
                                                  "deliravision", "__init__.py"))
 
 setup(
-    name='delira',
+    name='deliravision',
     version=deliravision_version,
     packages=find_packages(),
     url='https://github.com/justusschock/delira-vision',
@@ -58,7 +58,8 @@ setup(
     long_description=readme,
     long_description_content_type='text/markdown',
     license=license,
-    install_requires=requirements,
+    # default: Use TORCH Backend
+    install_requires=requirements + requirements_extra_torch,
     tests_require=["coverage"],
     python_requires=">=3.5",
     extras_require={
