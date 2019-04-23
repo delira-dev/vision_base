@@ -59,7 +59,6 @@ if "TORCH" in get_backends():
         def make_layers(cfg, norm_type=None, n_dim=2, in_channels=3,
                         pool_type="Max"):
             layers = []
-            print(cfg)
 
             for v in cfg:
                 if v == 'P':

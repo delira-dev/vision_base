@@ -30,8 +30,8 @@ if "TORCH" in get_backends():
 
     class SqueezeNetTorch(torch.nn.Module):
 
-        def __init__(self, version=1.0, num_classes=1000, n_dim=2,
-                     pool_type="Max", p_dropout=0.5):
+        def __init__(self, version=1.0, num_classes=1000, in_channels=3,
+                     n_dim=2, pool_type="Max", p_dropout=0.5):
 
             super().__init__()
 
@@ -42,7 +42,7 @@ if "TORCH" in get_backends():
             self.num_classes = num_classes
             if version == 1.0:
                 self.features = torch.nn.Sequential(
-                    ConvNdTorch(n_dim, 3, 96, kernel_size=7, stride=2),
+                    ConvNdTorch(n_dim, in_channels, 96, kernel_size=7, stride=2),
                     torch.nn.ReLU(inplace=True),
                     PoolingNdTorch(pool_type, n_dim, kernel_size=3, stride=2,
                                    ceil_mode=True),
@@ -60,9 +60,9 @@ if "TORCH" in get_backends():
                     FireTorch(512, 64, 256, 256),
                 )
             else:
-                self.features = nn.Sequential(
+                self.features = torch.nn.Sequential(
                     ConvNdTorch(n_dim, 3, 64, kernel_size=3, stride=2),
-                    nn.ReLU(inplace=True),
+                    torch.nn.ReLU(inplace=True),
                     PoolingNdTorch(pool_type, n_dim, kernel_size=3, stride=2,
                                    ceil_mode=True),
                     FireTorch(64, 16, 64, 64),
@@ -94,7 +94,7 @@ if "TORCH" in get_backends():
                         torch.nn.init.normal_(m._conv.weight, mean=0.0, std=0.01)
                     else:
                         torch.nn.init.kaiming_uniform_(m._conv.weight)
-                    if m.bias is not None:
+                    if m._conv.bias is not None:
                         torch.nn.init.constant_(m._conv.bias, 0)
 
         def forward(self, x):

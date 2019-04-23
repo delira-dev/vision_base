@@ -3,6 +3,7 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from torch.nn import functional as F
+    from collections import OrderedDict
     from ..utils import ConvNdTorch, PoolingNdTorch, NormNdTorch
 
 
@@ -61,7 +62,7 @@ if "TORCH" in get_backends():
                                                 kernel_size=1, stride=1,
                                                 bias=False))
             self.add_module('pool', PoolingNdTorch("AdaptiveAvg", n_dim,
-                                                   kernel_size=2, stride=2))
+                                                   output_size=2))
 
 
     class DenseNetTorch(torch.nn.Module):
@@ -77,6 +78,7 @@ if "TORCH" in get_backends():
             num_classes (int) - number of classification classes
         """
 
+        # ToDO: Add input channels to densenet
         def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
                      num_init_features=64, bn_size=4, drop_rate=0, num_classes=1000,
                      n_dim=2, pool_type="Max", norm_type="Batch"):
@@ -84,7 +86,7 @@ if "TORCH" in get_backends():
             super().__init__()
 
             # First convolution
-            self.features = torch.nn.Sequential(dict([
+            self.features = torch.nn.Sequential(OrderedDict([
                 ('conv0', ConvNdTorch(n_dim, 3, num_init_features, kernel_size=7,
                                       stride=2, padding=3, bias=False)),
                 ('norm0', NormNdTorch(norm_type, n_dim, num_init_features)),
@@ -127,10 +129,10 @@ if "TORCH" in get_backends():
                     torch.nn.init.kaiming_normal_(m._conv.weight)
                 elif isinstance(m, NormNdTorch):
                     if hasattr(m._norm, "weight"):
-                        torch.nn.init.constant_(m.weight, 1)
+                        torch.nn.init.constant_(m._norm.weight, 1)
 
                     if hasattr(m._norm, "bias"):
-                        torch.nn.init.constant_(m.bias, 0)
+                        torch.nn.init.constant_(m._norm.bias, 0)
                 elif isinstance(m, torch.nn.Linear):
                     torch.nn.init.constant_(m.bias, 0)
 

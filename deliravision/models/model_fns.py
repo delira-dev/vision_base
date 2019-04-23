@@ -94,14 +94,15 @@ if "TORCH" in get_backends():
     def create_resnext_torch(num_layers: int, num_classes=1000, in_channels=3,
                              cardinality=32, width=4, start_filts=64,
                              norm_layer="Batch",
-                             n_dim=2):
+                             n_dim=2, start_mode="7x7"):
         config = RESNEXT_CONFIGS[str(num_layers)]
 
         return ResNeXtTorch(config["block"], config["layers"],
                             num_classes=num_classes,
                             in_channels=in_channels, cardinality=cardinality,
                             width=width, start_filts=start_filts,
-                            norm_layer=norm_layer, n_dim=n_dim)
+                            norm_layer=norm_layer, n_dim=n_dim,
+                            start_mode=start_mode)
 
     def create_seresnext_torch(num_layers: int, num_classes=1000, in_channels=3,
                              cardinality=32, width=4, start_filts=64,
@@ -220,17 +221,17 @@ if "TORCH" in get_backends():
                        n_dim=n_dim, pool_type=pool_type)
 
 
-    def squeezenet1_0_torch(num_classes=1000, n_dim=2,
+    def squeezenet1_0_torch(num_classes=1000, in_channels=3, n_dim=2,
                             pool_type="Max", p_dropout=0.5):
         r"""SqueezeNet model architecture from the `"SqueezeNet: AlexNet-level
         accuracy with 50x fewer parameters and <0.5MB model size"
         <https://arxiv.org/abs/1602.07360>`_ paper.
         """
         return SqueezeNetTorch(version=1.0, num_classes=num_classes,
-                               n_dim=n_dim,
+                               in_channels=in_channels, n_dim=n_dim,
                                pool_type=pool_type, p_dropout=p_dropout)
 
-    def squeezenet1_1_torch(num_classes=1000, n_dim=2,
+    def squeezenet1_1_torch(num_classes=1000, in_channels=3, n_dim=2,
                             pool_type="Max", p_dropout=0.5):
         r"""SqueezeNet 1.1 model from the `official SqueezeNet repo
         <https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1>`_.
@@ -238,7 +239,7 @@ if "TORCH" in get_backends():
         than SqueezeNet 1.0, without sacrificing accuracy.
         """
         return SqueezeNetTorch(version=1.1, num_classes=num_classes,
-                               n_dim=n_dim,
+                               in_channels=in_channels, n_dim=n_dim,
                                pool_type=pool_type, p_dropout=p_dropout)
 
     def densenet_121_torch(bn_size=4, drop_rate=0, num_classes=1000,
