@@ -29,7 +29,5 @@ install:
 
 # command to run tests
 script:
-  - cd delira-vision
   - coverage run -m unittest
   # - codecov
-  - cd ..
