@@ -23,7 +23,6 @@ before_install:
   - pip install -r requirements_extra_torch.txt
   - pip install coverage
   - pip install codecov
-  - pip install -r docs/requirements.txt
 
 install:
   - pip install .
