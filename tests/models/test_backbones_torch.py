@@ -235,10 +235,10 @@ class TestBackbones(unittest.TestCase):
         #     gpu_available = True
         #     device = torch.device("cuda:0")
 
+        print("Testing Model Inference:")
         for case in self.test_cases:
             with self.subTest(case=case):
                 with torch.no_grad():
-                    print("%s: START" % case["name"].upper())
 
                     model = case["network_cls"](**case["network_kwargs"]
                                                 ).to(device)
@@ -252,7 +252,7 @@ class TestBackbones(unittest.TestCase):
                     del model
                     del input_tensor
                     gc.collect()
-                    print("%s: END" % case["name"].upper())
+                    print("\t%s" % case["name"])
 
 
 if __name__ == '__main__':

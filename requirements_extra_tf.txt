@@ -1,1 +1,5 @@
-delira[tf]>=0.3.1
+# ToDO: Change explicit requirements to delira[tf] once, we released a new delira version based on tf1.13
+
+tensorflow-gpu==1.13.1
+trixi-slim>=0.1.2.1
+delira>=0.3.1
