@@ -3,7 +3,7 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
 
-    class ForwardHook:
+    class ForwardHookPyTorch:
         def __init__(self, module: torch.nn.Module):
             """
             Forward hook to extract output from layer
@@ -54,7 +54,7 @@ if "TORCH" in get_backends():
         list
             list with references to specified layers
         """
-        def extract_layer(model, layer):
+        def extract_layer_pytorch(model, layer):
             """
             Extract a reference to single layer from model
 
@@ -82,10 +82,10 @@ if "TORCH" in get_backends():
                 name = layer
             return getattr(submod, name)
 
-        return [extract_layer(model, l) for l in layers]
+        return [extract_layer_pytorch(model, l) for l in layers]
 
 
-    class Extractor:
+    class ExtractorPyTorch:
         def __init__(self, layers):
             """
             Extract feature maps from backbone network
@@ -96,7 +96,7 @@ if "TORCH" in get_backends():
                 layers where feature maps should be extracted from
             """
             # TODO: check for correct gradients through forward hook
-            self.hooks = [ForwardHook(l) for l in layers]
+            self.hooks = [ForwardHookPyTorch(l) for l in layers]
 
         def get_feature_maps(self):
             return [self.hooks.features]
