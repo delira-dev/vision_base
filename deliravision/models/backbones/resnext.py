@@ -6,6 +6,7 @@ if "TORCH" in get_backends():
     import torch
     import torch.nn as nn
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
 
     class BottleneckTorch(nn.Module):
         expansion = 4
@@ -145,7 +146,7 @@ if "TORCH" in get_backends():
             return self.convs(input)
 
 
-    class ResNeXtTorch(nn.Module):
+    class ResNeXtTorch(BaseClassificationPyTorchNetwork):
         """
         ResNeXt model architecture
         """
@@ -179,7 +180,14 @@ if "TORCH" in get_backends():
             norm_layer : str
                 type of normalization
             """
-            super().__init__()
+            super().__init__(block, layers, num_classes, in_channels,
+                             cardinality, width, start_filts, start_mode,
+                             n_dim, norm_layer)
+
+        def _build_model(self, block, layers, num_classes, in_channels,
+                         cardinality, width, start_filts, start_mode,
+                         n_dim, norm_layer):
+
             self._cardinality = cardinality
             self._width = width
             self._start_filts = start_filts

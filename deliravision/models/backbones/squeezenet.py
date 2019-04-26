@@ -3,6 +3,7 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, PoolingNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
 
     class FireTorch(torch.nn.Module):
 
@@ -28,13 +29,16 @@ if "TORCH" in get_backends():
             ], 1)
 
 
-    class SqueezeNetTorch(torch.nn.Module):
+    class SqueezeNetTorch(BaseClassificationPyTorchNetwork):
 
         def __init__(self, version=1.0, num_classes=1000, in_channels=3,
                      n_dim=2, pool_type="Max", p_dropout=0.5):
 
-            super().__init__()
+            super().__init__(version, num_classes, in_channels, n_dim,
+                             pool_type, p_dropout)
 
+        def _build_model(self, version, num_classes, in_channels, n_dim,
+                         pool_type, p_dropout):
             if version not in [1.0, 1.1]:
                 raise ValueError("Unsupported SqueezeNet version {version}:"
                                  "1.0 or 1.1 expected".format(version=version))
