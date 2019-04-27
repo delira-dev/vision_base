@@ -13,10 +13,12 @@ if "TORCH" in __get_backends():
     from .resnext import ResNeXtTorch
     from .seblocks import SEBasicBlockTorch, SEBottleneckTorch, \
         SEBottleneckXTorch
+    from .unet import UNetPyTorch, LinkNetPyTorch
 
     __all__ += [
         "AlexNetTorch",
         "DenseNetTorch",
+        "LinkNetPyTorch",
         "MobileNetV2Torch",
         "ResNetTorch",
         "ResNeXtTorch",
@@ -24,5 +26,6 @@ if "TORCH" in __get_backends():
         "SEBottleneckTorch",
         "SEBottleneckXTorch",
         "SqueezeNetTorch",
+        "UNetPyTorch",
         "VGGTorch",
     ]

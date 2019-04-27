@@ -5,6 +5,7 @@ if "TORCH" in get_backends():
     from torch.nn import functional as F
     from collections import OrderedDict
     from ..utils import ConvNdTorch, PoolingNdTorch, NormNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
 
 
     class _DenseLayerTorch(torch.nn.Sequential):
@@ -65,7 +66,7 @@ if "TORCH" in get_backends():
                                                    output_size=2))
 
 
-    class DenseNetTorch(torch.nn.Module):
+    class DenseNetPyTorch(BaseClassificationPyTorchNetwork):
         r"""Densenet-BC model class, based on
         `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_
         Args:
@@ -83,7 +84,13 @@ if "TORCH" in get_backends():
                      num_init_features=64, bn_size=4, drop_rate=0, num_classes=1000,
                      n_dim=2, pool_type="Max", norm_type="Batch"):
 
-            super().__init__()
+            super().__init__(growth_rate, block_config, num_init_features,
+                             bn_size, drop_rate, num_classes, n_dim, pool_type,
+                             norm_type)
+
+        def _build_model(self, growth_rate, block_config, num_init_features,
+                         bn_size, drop_rate, num_classes, n_dim, pool_type,
+                         norm_type):
 
             # First convolution
             self.features = torch.nn.Sequential(OrderedDict([

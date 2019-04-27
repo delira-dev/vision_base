@@ -4,6 +4,8 @@ import copy
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
+
 
     def conv3x3(in_planes, out_planes, stride=1, n_dim=2):
         """3x3 convolution with padding"""
@@ -93,11 +95,15 @@ if "TORCH" in get_backends():
             return out
 
 
-    class ResNetTorch(torch.nn.Module):
+    class ResNetTorch(BaseClassificationPyTorchNetwork):
         def __init__(self, block, layers, num_classes=1000, in_channels=3,
                      zero_init_residual=False, norm_layer="Batch", n_dim=2,
                      start_filts=64):
-            super().__init__()
+            super().__init__(block, layers, num_classes, in_channels,
+                             zero_init_residual, norm_layer, n_dim, start_filts)
+
+        def _build_model(self, block, layers, num_classes, in_channels,
+                         zero_init_residual, norm_layer, n_dim, start_filts):
             self.start_filts = start_filts
             self.inplanes = copy.copy(start_filts)
             self.conv1 = ConvNdTorch(n_dim, in_channels, self.inplanes,

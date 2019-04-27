@@ -3,6 +3,7 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, NormNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
 
     class ConvNormReLU(torch.nn.Sequential):
         def __init__(self, in_planes, out_planes, kernel_size=3, stride=1,
@@ -50,10 +51,13 @@ if "TORCH" in get_backends():
                 return self.conv(x)
 
 
-    class MobileNetV2Torch(torch.nn.Module):
+    class MobileNetV2Torch(BaseClassificationPyTorchNetwork):
         def __init__(self, num_classes=1000, width_mult=1.0, n_dim=2,
                      norm_type="Batch"):
-            super().__init__()
+            super().__init__(num_classes, width_mult, n_dim, norm_type)
+
+        def _build_model(self, num_classes, width_mult, n_dim, norm_type):
+
             block = InvertedResidualTorch
             input_channel = 32
             last_channel = 1280

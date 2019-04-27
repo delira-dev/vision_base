@@ -3,14 +3,18 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
+    from ..basic_networks import BaseClassificationPyTorchNetwork
 
-    class VGGTorch(torch.nn.Module):
+    class VGGTorch(BaseClassificationPyTorchNetwork):
 
         def __init__(self, feature_cfg, num_classes=1000, in_channels=3,
                      init_weights=True, n_dim=2, norm_type="Batch",
                      pool_type="Max"):
-            super().__init__()
+            super().__init__(feature_cfg, num_classes, in_channels,
+                             init_weights, n_dim, norm_type, pool_type)
 
+        def _build_model(self, feature_cfg, num_classes, in_channels,
+                         init_weights, n_dim, norm_type, pool_type):
             self.features = self.make_layers(feature_cfg, norm_type=norm_type,
                                              n_dim=n_dim,
                                              in_channels=in_channels,
