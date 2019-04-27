@@ -117,8 +117,10 @@ if "TORCH" in get_backends():
 
             num_layers = 0
             for idx, _layers in enumerate(layers):
+                stride = 1 if idx == 0 else 2
                 planes = min(self.start_filts*pow(2, idx), self.start_filts*8)
                 _local_layer = self._make_layer(block, planes, _layers,
+                                                stride=stride,
                                                 norm_layer=norm_layer,
                                                 n_dim=n_dim)
 

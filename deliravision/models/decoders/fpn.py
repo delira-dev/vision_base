@@ -125,15 +125,4 @@ if "TORCH" in get_backends():
 
                 # compute output
                 out_list.append(out_conv(lateral))
-            return out_list
-
-
-#if __name__ == "__main__":
-#    net = FPN((2, 2, 2), (4, 8, 16, 32), 2, interp_mode='trilinear', n_dim=3)
-#    in_list = [
-#        torch.rand(1, 4, 32, 32, 32),
-#        torch.rand(1, 8, 16, 16, 16),
-#        torch.rand(1, 16, 8, 8, 8),
-#        torch.rand(1, 32, 4, 4, 4),]
-#    out_list = net(in_list)
-#    print("Here")
+            return out_list[::-1]

@@ -9,5 +9,5 @@ if "TORCH" in __get_backends():
         densenet_121_torch, densenet_161_torch, densenet_169_torch, \
         densenet_201_torch, create_densenet_torch
 
-    from .models.backbones import ResNetTorch, VGGTorch, AlexNetTorch, \
-        SqueezeNetTorch, DenseNetTorch
+    from .models.backbones import ResNetTorch, VGGTorch, AlexNetPyTorch, \
+        SqueezeNetTorch, DenseNetPyTorch

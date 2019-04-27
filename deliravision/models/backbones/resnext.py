@@ -204,13 +204,15 @@ if "TORCH" in get_backends():
                                           stride=2, padding=1)
 
             for idx, _layers in enumerate(layers):
+                stride = 1 if idx == 0 else 2
                 planes = self._start_filts * pow(2, idx)
                 _local_layer = self._make_layer(block,
                                                 _layers,
                                                 self.inplanes,
                                                 planes,
                                                 norm_layer=norm_layer,
-                                                n_dim=n_dim)
+                                                n_dim=n_dim,
+                                                pool_stride=stride)
 
                 setattr(self, "C%d" % (idx + 1), _local_layer)
                 self.inplanes = planes * block.expansion
@@ -279,12 +281,3 @@ if "TORCH" in get_backends():
             x = x.view(x.size(0), -1)
             x = self.fc(x)
             return x
-
-
-# if __name__ == "__main__":
-#     from deliravision.models.backbones.seblocks import SEBottleneckXTorch
-#
-#     net = ResNeXtTorch(SEBottleneckXTorch, [3, 4, 6, 3], 2, 3, 32, 4,
-#                        start_filts=64, n_dim=3)
-#     inp = torch.rand(1, 3, 32, 128, 128)
-#     net(inp)

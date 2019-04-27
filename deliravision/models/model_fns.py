@@ -5,9 +5,9 @@ if "TORCH" in get_backends():
     from .backbones.resnet import ResNetTorch as ResNet, \
         BasicBlockTorch as BasicBlock, BottleneckTorch as Bottleneck
     from .backbones.vgg import VGGTorch as VGG
-    from .backbones.alexnet import AlexNetTorch as AlexNet
+    from .backbones.alexnet import AlexNetPyTorch as AlexNet
     from .backbones.squeezenet import SqueezeNetTorch
-    from .backbones.densenet import DenseNetTorch
+    from .backbones.densenet import DenseNetPyTorch
     from .backbones.mobilenet import MobileNetV2Torch
     from .backbones.resnext import ResNeXtTorch, BottleneckTorch as \
         BottleneckXTorch
@@ -131,9 +131,9 @@ if "TORCH" in get_backends():
                               norm_type="Batch"):
         config = DENSENET_CONFIGS[str(num_layers)]
 
-        return DenseNetTorch(**config, bn_size=bn_size, drop_rate=drop_rate,
-                             num_classes=num_classes, n_dim=n_dim,
-                             pool_type=pool_type, norm_type=norm_type)
+        return DenseNetPyTorch(**config, bn_size=bn_size, drop_rate=drop_rate,
+                               num_classes=num_classes, n_dim=n_dim,
+                               pool_type=pool_type, norm_type=norm_type)
 
     def resnet18_torch(num_classes=1000, in_channels=3,
                        zero_init_residual=False, norm_layer=None, n_dim=2):

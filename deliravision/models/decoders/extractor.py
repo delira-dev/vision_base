@@ -62,7 +62,7 @@ if "TORCH" in get_backends():
             ----------
             model : torch.nn.Module
                 model where layers should be extracted from
-            names : str
+            layer : str
                 name of respective layer
 
             Returns
@@ -95,8 +95,15 @@ if "TORCH" in get_backends():
             layers : iterable of nn.Module
                 layers where feature maps should be extracted from
             """
-            # TODO: check for correct gradients through forward hook
             self.hooks = [ForwardHookPyTorch(l) for l in layers]
 
         def get_feature_maps(self):
-            return [self.hooks.features]
+            """
+            Get extracted feature maps
+
+            Returns
+            -------
+            list
+                list of feature maps
+            """
+            return [h.features for h in self.hooks]

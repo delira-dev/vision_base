@@ -22,7 +22,10 @@ if "TORCH" in get_backends():
                 `channels`)
             channels : iterable of int
                 number of channels of each feature maps
-            merge_mode
+            merge_mode : str
+                Defines which mode should be used to merge feature maps of skip
+                connection. `cat` concatenates feature maps, `add` uses
+                elementwise addition
             interp_mode : str
                 if `transpose` a transposed convolution is used for upsampling,
                 otherwise it defines the methods used in torch.interpolate
@@ -134,22 +137,4 @@ if "TORCH" in get_backends():
                 if idx != self.num_layers:
                     up_conv = getattr(self, 'P_up{}'.format(self.num_layers - idx))
                     up = up_conv(out)
-            return out_list
-
-
-# if __name__ == "__main__":
-#     net = UNet((2, 2, (2, 4)), (4, 8, 16, 32), merge_mode='cat',
-#                interp_mode='transpose')
-#     in_list = [
-#         torch.rand(1, 4, 32, 32),
-#         torch.rand(1, 8, 16, 16),
-#         torch.rand(1, 16, 8, 8),
-#         torch.rand(1, 32, 4, 2),]
-#     out_list = net(in_list)
-#     print("Here")
-
-
-
-
-
-
+            return out_list[::-1]
