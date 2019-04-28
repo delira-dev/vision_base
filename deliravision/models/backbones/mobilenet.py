@@ -105,15 +105,15 @@ if "TORCH" in get_backends():
             # weight initialization
             for m in self.modules():
                 if isinstance(m, ConvNdTorch):
-                    torch.nn.init.kaiming_normal_(m._conv.weight, mode='fan_out')
-                    if m._conv.bias is not None:
-                        torch.nn.init.zeros_(m._conv.bias)
+                    torch.nn.init.kaiming_normal_(m.conv.weight, mode='fan_out')
+                    if m.conv.bias is not None:
+                        torch.nn.init.zeros_(m.conv.bias)
                 elif isinstance(m,  NormNdTorch):
-                    if hasattr(m._norm, "weight") and m._norm.weight is not None:
-                        torch.nn.init.ones_(m._norm.weight)
+                    if hasattr(m.norm, "weight") and m.norm.weight is not None:
+                        torch.nn.init.ones_(m.norm.weight)
 
-                    if hasattr(m._norm, "bias") and m._norm.bias is not None:
-                        torch.nn.init.zeros_(m._norm.bias)
+                    if hasattr(m.norm, "bias") and m.norm.bias is not None:
+                        torch.nn.init.zeros_(m.norm.bias)
 
                 elif isinstance(m, torch.nn.Linear):
                     torch.nn.init.normal_(m.weight, 0, 0.01)

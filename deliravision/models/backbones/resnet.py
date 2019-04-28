@@ -134,15 +134,15 @@ if "TORCH" in get_backends():
 
             for m in self.modules():
                 if isinstance(m, ConvNdTorch):
-                    torch.nn.init.kaiming_normal_(m._conv.weight,
+                    torch.nn.init.kaiming_normal_(m.conv.weight,
                                                   mode='fan_out',
                                                   nonlinearity='relu')
 
                 elif isinstance(m, NormNdTorch):
-                    if hasattr(m._norm, "weight") and m._norm.weight is not None:
-                        torch.nn.init.constant_(m._norm.weight, 1)
-                    if hasattr(m._norm, "bias") and m._norm.bias is not None:
-                        torch.nn.init.constant_(m._norm.bias, 0)
+                    if hasattr(m.norm, "weight") and m.norm.weight is not None:
+                        torch.nn.init.constant_(m.norm.weight, 1)
+                    if hasattr(m.norm, "bias") and m.norm.bias is not None:
+                        torch.nn.init.constant_(m.norm.bias, 0)
 
             # Zero-initialize the last BN in each residual branch,
             # so that the residual branch starts with zeros, and each
@@ -152,9 +152,9 @@ if "TORCH" in get_backends():
             if zero_init_residual:
                 for m in self.modules():
                     if isinstance(m, BottleneckTorch):
-                        torch.nn.init.constant_(m.bn3._norm.weight, 0)
+                        torch.nn.init.constant_(m.bn3.norm.weight, 0)
                     elif isinstance(m, BasicBlockTorch):
-                        torch.nn.init.constant_(m.bn2._norm.weight, 0)
+                        torch.nn.init.constant_(m.bn2.norm.weight, 0)
 
         def _make_layer(self, block, planes, blocks, stride=1, norm_layer="Batch",
                         n_dim=2):

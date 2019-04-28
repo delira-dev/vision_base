@@ -95,11 +95,11 @@ if "TORCH" in get_backends():
             for m in self.modules():
                 if isinstance(m, ConvNdTorch):
                     if m is final_conv:
-                        torch.nn.init.normal_(m._conv.weight, mean=0.0, std=0.01)
+                        torch.nn.init.normal_(m.conv.weight, mean=0.0, std=0.01)
                     else:
-                        torch.nn.init.kaiming_uniform_(m._conv.weight)
-                    if m._conv.bias is not None:
-                        torch.nn.init.constant_(m._conv.bias, 0)
+                        torch.nn.init.kaiming_uniform_(m.conv.weight)
+                    if m.conv.bias is not None:
+                        torch.nn.init.constant_(m.conv.bias, 0)
 
         def forward(self, x):
             x = self.features(x)

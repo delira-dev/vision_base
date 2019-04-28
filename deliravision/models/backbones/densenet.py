@@ -133,13 +133,13 @@ if "TORCH" in get_backends():
             # Official init from torch repo.
             for m in self.modules():
                 if isinstance(m, ConvNdTorch):
-                    torch.nn.init.kaiming_normal_(m._conv.weight)
+                    torch.nn.init.kaiming_normal_(m.conv.weight)
                 elif isinstance(m, NormNdTorch):
-                    if hasattr(m._norm, "weight") and m._norm.weight is not None:
-                        torch.nn.init.constant_(m._norm.weight, 1)
+                    if hasattr(m.norm, "weight") and m.norm.weight is not None:
+                        torch.nn.init.constant_(m.norm.weight, 1)
 
-                    if hasattr(m._norm, "bias") and m._norm.bias is not None:
-                        torch.nn.init.constant_(m._norm.bias, 0)
+                    if hasattr(m.norm, "bias") and m.norm.bias is not None:
+                        torch.nn.init.constant_(m.norm.bias, 0)
                 elif isinstance(m, torch.nn.Linear):
                     torch.nn.init.constant_(m.bias, 0)
 

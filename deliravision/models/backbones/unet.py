@@ -124,8 +124,8 @@ if "TORCH" in get_backends():
                 module to initialize
             """
             if isinstance(m, ConvNdTorch):
-                torch.nn.init.xavier_normal_(m._conv.weight)
-                torch.nn.init.constant_(m._conv.bias, 0)
+                torch.nn.init.xavier_normal_(m.conv.weight)
+                torch.nn.init.constant_(m.conv.bias, 0)
 
         def reset_params(self):
             """
