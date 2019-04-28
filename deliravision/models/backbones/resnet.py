@@ -139,9 +139,9 @@ if "TORCH" in get_backends():
                                                   nonlinearity='relu')
 
                 elif isinstance(m, NormNdTorch):
-                    if hasattr(m._norm, "weight"):
+                    if hasattr(m._norm, "weight") and m._norm.weight is not None:
                         torch.nn.init.constant_(m._norm.weight, 1)
-                    if hasattr(m._norm, "bias"):
+                    if hasattr(m._norm, "bias") and m._norm.bias is not None:
                         torch.nn.init.constant_(m._norm.bias, 0)
 
             # Zero-initialize the last BN in each residual branch,

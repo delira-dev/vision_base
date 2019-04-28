@@ -109,10 +109,10 @@ if "TORCH" in get_backends():
                     if m._conv.bias is not None:
                         torch.nn.init.zeros_(m._conv.bias)
                 elif isinstance(m,  NormNdTorch):
-                    if hasattr(m._norm, "weight"):
+                    if hasattr(m._norm, "weight") and m._norm.weight is not None:
                         torch.nn.init.ones_(m._norm.weight)
 
-                    if hasattr(m._norm, "bias"):
+                    if hasattr(m._norm, "bias") and m._norm.bias is not None:
                         torch.nn.init.zeros_(m._norm.bias)
 
                 elif isinstance(m, torch.nn.Linear):
