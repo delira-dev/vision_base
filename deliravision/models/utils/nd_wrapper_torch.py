@@ -255,3 +255,14 @@ if "TORCH" in get_backends():
 
             """
             return self.norm(x)
+
+
+    class DropoutWrapper(torch.nn.Module):
+        def __init__(self, n_dim, p=0.5, inplace=False):
+            super().__init__()
+            dropout_cls = getattr(torch.nn, "Dropout%dd" % n_dim)
+            self.dropout = dropout_cls(p=p, inplace=inplace)
+
+        def forward(self, x):
+            return self.dropout(x)
+
