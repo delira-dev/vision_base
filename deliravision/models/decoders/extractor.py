@@ -4,7 +4,7 @@ if "TORCH" in get_backends():
     import torch
 
     class ForwardHookPyTorch:
-        def __init__(self, module: torch.nn.Module):
+        def __init__(self, module: torch.nn.Module, overwrite_feats=False):
             """
             Forward hook to extract output from layer
 
@@ -12,8 +12,14 @@ if "TORCH" in get_backends():
             ----------
             module : torch.nn.Module
                 module where output should be extracted from
+            overwrite_feats : bool
+                whether to overwrite the features if they haven't been
+                reset to None, default: True
+
             """
             self.hook = module.register_forward_hook(self.hook_fn)
+            self._overwrite_feats = overwrite_feats
+            self._features = None
 
         def hook_fn(self, module, input, output):
             """
@@ -36,6 +42,45 @@ if "TORCH" in get_backends():
             Remove hook
             """
             self.hook.remove()
+
+        @property
+        def features(self):
+            """
+            Property returning the obtained features and setting the
+            resetting the internal attribute to None to correctly
+            release the graph.
+
+            Returns
+            -------
+            :class:`torch.Tensor`
+                the features to return
+
+            """
+            feats = self._features
+            self._features = None
+            return feats
+
+        @features.setter
+        def features(self, new_feats):
+            """
+            Sets the new features
+
+            Parameters
+            ----------
+            new_feats : :class:`torch.Tensor`
+                the new features
+
+            Raises
+            ------
+            AssertionError
+                if ``self._features`` is not None and the overwrite attribute
+                (``self._overwrite_feats``) is not set.
+
+            """
+            assert (self._features is None or self._overwrite_feats), \
+                "previous features haven't been resetted"
+
+            self._features = new_feats
 
 
     def extract_layers_by_str(model, layers):
