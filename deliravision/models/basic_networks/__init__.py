@@ -4,10 +4,10 @@ __all__ = []
 
 if "TORCH" in __get_backends():
 
-    from .segmentation import BaseSegmentationPyTorchNetwork
-    from .classification import BaseClassificationPyTorchNetwork
+    from .segmentation import BaseSegmentationTorchNetwork
+    from .classification import BaseClassificationTorchNetwork
 
     __all__ += [
-        "BaseSegmentationPyTorchNetwork",
-        "BaseClassificationPyTorchNetwork"
+        "BaseSegmentationTorchNetwork",
+        "BaseClassificationTorchNetwork"
     ]

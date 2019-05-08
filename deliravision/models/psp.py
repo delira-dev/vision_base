@@ -4,9 +4,9 @@ if "TORCH" in get_backends():
     import torch
     from torch.nn import functional as F
     from .utils import ConvNdTorch, PoolingNdTorch, NormNdTorch, DropoutNdTorch
-    from .basic_networks import BaseSegmentationPyTorchNetwork
+    from .basic_networks import BaseSegmentationTorchNetwork
 
-    class PSPModulePyTorch(torch.nn.Module):
+    class PSPModuleTorch(torch.nn.Module):
         def __init__(self, features, out_features=1024, sizes=(1, 2, 3, 6), n_dim=2):
             super().__init__()
 
@@ -36,7 +36,7 @@ if "TORCH" in get_backends():
 
             return F.relu(self.bottleneck(torch.cat(priors, 1)))
 
-    class PSPUpsamplePyTorch(torch.nn.Module):
+    class PSPUpsampleTorch(torch.nn.Module):
         def __init__(self, in_channels, out_channels, n_dim, norm_type="Batch"):
             super().__init__()
             self.conv = torch.nn.Sequential(
@@ -58,7 +58,7 @@ if "TORCH" in get_backends():
 
             return self.conv(F.upsample(x, size=spatial_size, mode=self.upsampling_mode))
 
-    class PSPNet(BaseSegmentationPyTorchNetwork):
+    class PSPNet(BaseSegmentationTorchNetwork):
         def __init__(self, n_classes, sizes=(1, 2, 3, 6), psp_size=2048, deep_feature_size=1024, backend="resnet18",
                      n_dim=2, norm_type="Batch", logsoftmax=True):
 
@@ -72,12 +72,12 @@ if "TORCH" in get_backends():
             # ToDo: remove classifier/last FC from backend net (maybe not necessary at all)
             self._backend = getattr(backends, backend + "_torch")
 
-            self._psp = PSPModulePyTorch(psp_size, 1024, sizes)
+            self._psp = PSPModuleTorch(psp_size, 1024, sizes)
             self._drop_1 = DropoutNdTorch(n_dim, 0.3)
 
-            self._up_1 = PSPUpsamplePyTorch(1024, 256, n_dim, norm_type)
-            self._up_2 = PSPUpsamplePyTorch(256, 64, n_dim, norm_type)
-            self._up_3 = PSPUpsamplePyTorch(64, 64, n_dim, norm_type)
+            self._up_1 = PSPUpsampleTorch(1024, 256, n_dim, norm_type)
+            self._up_2 = PSPUpsampleTorch(256, 64, n_dim, norm_type)
+            self._up_3 = PSPUpsampleTorch(64, 64, n_dim, norm_type)
 
             self._drop_2 = DropoutNdTorch(n_dim, 0.15)
 

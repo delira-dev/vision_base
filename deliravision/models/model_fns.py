@@ -5,9 +5,9 @@ if "TORCH" in get_backends():
     from .backbones.resnet import ResNetTorch as ResNet, \
         BasicBlockTorch as BasicBlock, BottleneckTorch as Bottleneck
     from .backbones.vgg import VGGTorch as VGG
-    from .backbones.alexnet import AlexNetPyTorch as AlexNet
+    from .backbones.alexnet import AlexNetTorch as AlexNet
     from .backbones.squeezenet import SqueezeNetTorch
-    from .backbones.densenet import DenseNetPyTorch
+    from .backbones.densenet import DenseNetTorch
     from .backbones.mobilenet import MobileNetV2Torch
     from .backbones.resnext import ResNeXtTorch, BottleneckTorch as \
         BottleneckXTorch
@@ -98,11 +98,11 @@ if "TORCH" in get_backends():
         config = RESNEXT_CONFIGS[str(num_layers)]
 
         return ResNeXtTorch(config["block"], config["layers"],
-                            num_classes=num_classes,
-                            in_channels=in_channels, cardinality=cardinality,
-                            width=width, start_filts=start_filts,
-                            norm_layer=norm_layer, n_dim=n_dim,
-                            start_mode=start_mode)
+                              num_classes=num_classes,
+                              in_channels=in_channels, cardinality=cardinality,
+                              width=width, start_filts=start_filts,
+                              norm_layer=norm_layer, n_dim=n_dim,
+                              start_mode=start_mode)
 
     def create_seresnext_torch(num_layers: int, num_classes=1000, in_channels=3,
                              cardinality=32, width=4, start_filts=64,
@@ -111,10 +111,10 @@ if "TORCH" in get_backends():
         config = SERESNEXT_CONFIGS[str(num_layers)]
 
         return ResNeXtTorch(config["block"], config["layers"],
-                            num_classes=num_classes,
-                            in_channels=in_channels, cardinality=cardinality,
-                            width=width, start_filts=start_filts,
-                            norm_layer=norm_layer, n_dim=n_dim)
+                              num_classes=num_classes,
+                              in_channels=in_channels, cardinality=cardinality,
+                              width=width, start_filts=start_filts,
+                              norm_layer=norm_layer, n_dim=n_dim)
 
     def create_vgg_torch(num_layers: int, num_classes=1000, in_channels=3,
                          init_weights=True, n_dim=2, norm_type="Batch",
@@ -131,143 +131,7 @@ if "TORCH" in get_backends():
                               norm_type="Batch"):
         config = DENSENET_CONFIGS[str(num_layers)]
 
-        return DenseNetPyTorch(**config, bn_size=bn_size, drop_rate=drop_rate,
+        return DenseNetTorch(**config, bn_size=bn_size, drop_rate=drop_rate,
                                num_classes=num_classes, n_dim=n_dim,
                                pool_type=pool_type, norm_type=norm_type)
 
-    def resnet18_torch(num_classes=1000, in_channels=3,
-                       zero_init_residual=False, norm_layer=None, n_dim=2):
-        """Constructs a ResNet-18 model.
-        """
-        return create_resnet_torch(18, num_classes=num_classes,
-                                   in_channels=in_channels,
-                                   zero_init_residual=zero_init_residual,
-                                   norm_layer=norm_layer, n_dim=n_dim)
-
-    def resnet34_torch(num_classes=1000, in_channels=3,
-                       zero_init_residual=False, norm_layer=None, n_dim=2):
-        """Constructs a ResNet-34 model.
-        """
-        return create_resnet_torch(34, num_classes=num_classes,
-                                   in_channels=in_channels,
-                                   zero_init_residual=zero_init_residual,
-                                   norm_layer=norm_layer, n_dim=n_dim)
-
-
-    def resnet50_torch(num_classes=1000, in_channels=3,
-                       zero_init_residual=False, norm_layer=None, n_dim=2):
-        """Constructs a ResNet-50 model.
-        """
-        return create_resnet_torch(50, num_classes=num_classes,
-                                   in_channels=in_channels,
-                                   zero_init_residual=zero_init_residual,
-                                   norm_layer=norm_layer, n_dim=n_dim)
-
-
-    def resnet101_torch(num_classes=1000, in_channels=3,
-                        zero_init_residual=False, norm_layer=None, n_dim=2):
-        """Constructs a ResNet-101 model.
-        """
-        return create_resnet_torch(101, num_classes=num_classes,
-                                   in_channels=in_channels,
-                                   zero_init_residual=zero_init_residual,
-                                   norm_layer=norm_layer, n_dim=n_dim)
-
-    def resnet152_torch(num_classes=1000, in_channels=3,
-                        zero_init_residual=False, norm_layer=None, n_dim=2):
-        """Constructs a ResNet-152 model.
-        """
-        return create_resnet_torch(152, num_classes=num_classes,
-                                   in_channels=in_channels,
-                                   zero_init_residual=zero_init_residual,
-                                   norm_layer=norm_layer, n_dim=n_dim)
-
-
-    def vgg11_torch(num_classes=1000, in_channels=3, init_weights=True, n_dim=2,
-                    norm_type="Batch", pool_type="Max"):
-
-        return create_vgg_torch(11, num_classes=num_classes,
-                                in_channels=in_channels,
-                                init_weights=init_weights, n_dim=n_dim,
-                                norm_type=norm_type, pool_type=pool_type)
-
-    def vgg13_torch(num_classes=1000, in_channels=3, init_weights=True, n_dim=2,
-                    norm_type="Batch", pool_type="Max"):
-
-        return create_vgg_torch(13, num_classes=num_classes,
-                                in_channels=in_channels,
-                                init_weights=init_weights, n_dim=n_dim,
-                                norm_type=norm_type, pool_type=pool_type)
-
-    def vgg16_torch(num_classes=1000, in_channels=3, init_weights=True, n_dim=2,
-                    norm_type="Batch", pool_type="Max"):
-
-        return create_vgg_torch(16, num_classes=num_classes,
-                                in_channels=in_channels,
-                                init_weights=init_weights, n_dim=n_dim,
-                                norm_type=norm_type, pool_type=pool_type)
-
-    def vgg19_torch(num_classes=1000, in_channels=3, init_weights=True, n_dim=2,
-                    norm_type="Batch", pool_type="Max"):
-
-        return create_vgg_torch(19, num_classes=num_classes,
-                                in_channels=in_channels,
-                                init_weights=init_weights, n_dim=n_dim,
-                                norm_type=norm_type, pool_type=pool_type)
-
-    def alexnet_torch(num_classes=1000, in_channels=3, n_dim=2,
-                      pool_type="Max"):
-        return AlexNet(num_classes=num_classes, in_channels=in_channels,
-                       n_dim=n_dim, pool_type=pool_type)
-
-
-    def squeezenet1_0_torch(num_classes=1000, in_channels=3, n_dim=2,
-                            pool_type="Max", p_dropout=0.5):
-        r"""SqueezeNet model architecture from the `"SqueezeNet: AlexNet-level
-        accuracy with 50x fewer parameters and <0.5MB model size"
-        <https://arxiv.org/abs/1602.07360>`_ paper.
-        """
-        return SqueezeNetTorch(version=1.0, num_classes=num_classes,
-                               in_channels=in_channels, n_dim=n_dim,
-                               pool_type=pool_type, p_dropout=p_dropout)
-
-    def squeezenet1_1_torch(num_classes=1000, in_channels=3, n_dim=2,
-                            pool_type="Max", p_dropout=0.5):
-        r"""SqueezeNet 1.1 model from the `official SqueezeNet repo
-        <https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1>`_.
-        SqueezeNet 1.1 has 2.4x less computation and slightly fewer parameters
-        than SqueezeNet 1.0, without sacrificing accuracy.
-        """
-        return SqueezeNetTorch(version=1.1, num_classes=num_classes,
-                               in_channels=in_channels, n_dim=n_dim,
-                               pool_type=pool_type, p_dropout=p_dropout)
-
-    def densenet_121_torch(bn_size=4, drop_rate=0, num_classes=1000,
-                           n_dim=2, pool_type="Max", norm_type="Batch"):
-        return create_densenet_torch(121, bn_size=bn_size, drop_rate=drop_rate,
-                                     num_classes=num_classes, n_dim=n_dim,
-                                     pool_type=pool_type, norm_type=norm_type)
-
-    def densenet_161_torch(bn_size=4, drop_rate=0, num_classes=1000,
-                           n_dim=2, pool_type="Max", norm_type="Batch"):
-        return create_densenet_torch(161, bn_size=bn_size, drop_rate=drop_rate,
-                                     num_classes=num_classes, n_dim=n_dim,
-                                     pool_type=pool_type, norm_type=norm_type)
-
-    def densenet_169_torch(bn_size=4, drop_rate=0, num_classes=1000,
-                           n_dim=2, pool_type="Max", norm_type="Batch"):
-        return create_densenet_torch(169, bn_size=bn_size, drop_rate=drop_rate,
-                                     num_classes=num_classes, n_dim=n_dim,
-                                     pool_type=pool_type, norm_type=norm_type)
-
-    def densenet_201_torch(bn_size=4, drop_rate=0, num_classes=1000,
-                           n_dim=2, pool_type="Max", norm_type="Batch"):
-        return create_densenet_torch(201, bn_size=bn_size, drop_rate=drop_rate,
-                                     num_classes=num_classes, n_dim=n_dim,
-                                     pool_type=pool_type, norm_type=norm_type)
-
-    def mobilenet_v2_torch(num_classes=1000, width_mult=1.0, n_dim=2,
-                           norm_type="Batch"):
-        return MobileNetV2Torch(num_classes=num_classes,
-                                width_mult=width_mult, n_dim=n_dim,
-                                norm_type=norm_type)

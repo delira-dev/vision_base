@@ -12,7 +12,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Convolutions:
+        Torch Convolutions:
 
             * :class:`torch.nn.Conv1d`
 
@@ -98,7 +98,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Pooling Classes:
+        Torch Pooling Classes:
 
             * :class:`torch.nn.MaxPool1d`
 
@@ -181,7 +181,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Normalizations:
+        Torch Normalizations:
 
                 * :class:`torch.nn.BatchNorm1d`
 

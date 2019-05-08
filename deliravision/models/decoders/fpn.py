@@ -5,7 +5,7 @@ if "TORCH" in get_backends():
     import torch.nn as nn
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
 
-    class FPNPyTorch(nn.Module):
+    class FPNTorch(nn.Module):
         def __init__(self, strides, channels, out_channels,
                      interp_mode='nearest', n_dim=2, norm_type="Batch",
                      **kwargs):

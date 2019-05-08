@@ -7,7 +7,7 @@ if "TORCH" in get_backends():
     from delira.models.abstract_network import AbstractPyTorchNetwork
 
 
-    class BaseSegmentationPyTorchNetwork(AbstractPyTorchNetwork):
+    class BaseSegmentationTorchNetwork(AbstractPyTorchNetwork):
         def __init__(self, *args, **kwargs):
             """
             Provide a segmentation network skeleton to be subclassed by the
@@ -28,15 +28,27 @@ if "TORCH" in get_backends():
             self._build_model(*args, **kwargs)
 
         @abstractmethod
-        def forward(self, *args, **kwargs):
+        def forward(self, *args, **kwargs) -> dict:
             """
             Feed tensor through network
+
+            Parameters
+            ----------
+            *args :
+                positional arguments
+            **kwargs :
+                keyword arguments
+
+            Returns
+            -------
+            dict
+                a dict containing all predictions
 
             """
             raise NotImplementedError
 
         @abstractmethod
-        def _build_model(self, *args, **kwargs):
+        def _build_model(self, *args, **kwargs) -> None:
             """
             Implements the actual model
 
@@ -51,7 +63,7 @@ if "TORCH" in get_backends():
 
             Parameters
             ----------
-            model : :class:`ClassificationNetworkBasePyTorch`
+            model : :class:`ClassificationNetworkBaseTorch`
                 trainable model
             data_dict : dict
                 dictionary containing the data

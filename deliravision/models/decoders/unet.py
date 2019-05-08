@@ -5,7 +5,7 @@ if "TORCH" in get_backends():
     import torch.nn as nn
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
 
-    class UNetPyTorch(nn.Module):
+    class UNetTorch(nn.Module):
         def __init__(self, strides, channels,
                      merge_mode='add', interp_mode='nearest',
                      n_dim=2, norm_layer="Batch", **kwargs):
