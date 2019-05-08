@@ -10,7 +10,7 @@ class TestBackbones(unittest.TestCase):
 
         if "TORCH" in get_backends():
             # ToDO: Add MobileNet to tests
-            from deliravision.models.backbones import  SqueezeNetTorch, AlexNetTorch
+            from deliravision.models.backbones import  SqueezeNetTorch, AlexNetPyTorch
             from deliravision.models.model_fns import create_vgg_torch, create_resnet_torch, create_densenet_torch, \
                 create_resnext_torch, create_seresnext_torch, create_seresnet_torch
 
@@ -31,7 +31,7 @@ class TestBackbones(unittest.TestCase):
                 "name": "SqueezeNet1.1"
             })
             test_cases.append({
-                "network_cls": AlexNetTorch,
+                "network_cls": AlexNetPyTorch,
                 "network_kwargs": {"num_classes":1000, "in_channels":3,
                                   "n_dim":2, "pool_type":"Max"},
                 "input_shape": (5, 3, 224, 224),
