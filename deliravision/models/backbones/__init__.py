@@ -6,19 +6,19 @@ if "TORCH" in __get_backends():
 
     from .resnet import ResNetTorch
     from .vgg import VGGTorch
-    from .alexnet import AlexNetPyTorch
+    from .alexnet import AlexNetTorch
     from .squeezenet import SqueezeNetTorch
-    from .densenet import DenseNetPyTorch
+    from .densenet import DenseNetTorch
     from .mobilenet import MobileNetV2Torch
     from .resnext import ResNeXtTorch
     from .seblocks import SEBasicBlockTorch, SEBottleneckTorch, \
         SEBottleneckXTorch
-    from .unet import UNetPyTorch, LinkNetPyTorch
+    from .unet import UNetTorch, LinkNetTorch
 
     __all__ += [
-        "AlexNetPyTorch",
-        "DenseNetPyTorch",
-        "LinkNetPyTorch",
+        "AlexNetTorch",
+        "DenseNetTorch",
+        "LinkNetTorch",
         "MobileNetV2Torch",
         "ResNetTorch",
         "ResNeXtTorch",
@@ -26,6 +26,6 @@ if "TORCH" in __get_backends():
         "SEBottleneckTorch",
         "SEBottleneckXTorch",
         "SqueezeNetTorch",
-        "UNetPyTorch",
+        "UNetTorch",
         "VGGTorch",
     ]

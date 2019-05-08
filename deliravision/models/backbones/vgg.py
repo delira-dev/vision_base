@@ -3,9 +3,9 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
-    from ..basic_networks import BaseClassificationPyTorchNetwork
+    from ..basic_networks import BaseClassificationTorchNetwork
 
-    class VGGTorch(BaseClassificationPyTorchNetwork):
+    class VGGTorch(BaseClassificationTorchNetwork):
 
         def __init__(self, feature_cfg, num_classes=1000, in_channels=3,
                      init_weights=True, n_dim=2, norm_type="Batch",
@@ -14,7 +14,7 @@ if "TORCH" in get_backends():
                              init_weights, n_dim, norm_type, pool_type)
 
         def _build_model(self, feature_cfg, num_classes, in_channels,
-                         init_weights, n_dim, norm_type, pool_type):
+                         init_weights, n_dim, norm_type, pool_type) -> None:
             self.features = self.make_layers(feature_cfg, norm_type=norm_type,
                                              n_dim=n_dim,
                                              in_channels=in_channels,
@@ -33,12 +33,12 @@ if "TORCH" in get_backends():
             if init_weights:
                 self._initialize_weights()
 
-        def forward(self, x):
+        def forward(self, x) -> dict:
             x = self.features(x)
             x = self.avgpool(x)
             x = x.view(x.size(0), -1)
             x = self.classifier(x)
-            return x
+            return {"pred": x}
 
         def _initialize_weights(self):
             for m in self.modules():

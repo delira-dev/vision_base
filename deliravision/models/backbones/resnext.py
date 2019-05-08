@@ -6,7 +6,7 @@ if "TORCH" in get_backends():
     import torch
     import torch.nn as nn
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
-    from ..basic_networks import BaseClassificationPyTorchNetwork
+    from ..basic_networks import BaseClassificationTorchNetwork
 
     class BottleneckTorch(nn.Module):
         expansion = 4
@@ -146,7 +146,7 @@ if "TORCH" in get_backends():
             return self.convs(input)
 
 
-    class ResNeXtTorch(BaseClassificationPyTorchNetwork):
+    class ResNeXtTorch(BaseClassificationTorchNetwork):
         """
         ResNeXt model architecture
         """
@@ -186,7 +186,7 @@ if "TORCH" in get_backends():
 
         def _build_model(self, block, layers, num_classes, in_channels,
                          cardinality, width, start_filts, start_mode,
-                         n_dim, norm_layer):
+                         n_dim, norm_layer) -> None:
 
             self._cardinality = cardinality
             self._width = width
@@ -257,7 +257,7 @@ if "TORCH" in get_backends():
                                     n_dim, norm_layer))
             return nn.Sequential(*module)
 
-        def forward(self, inp):
+        def forward(self, inp) -> dict:
             """
             Forward input through network
 
@@ -280,4 +280,4 @@ if "TORCH" in get_backends():
             x = self.avgpool(x)
             x = x.view(x.size(0), -1)
             x = self.fc(x)
-            return x
+            return {"pred": x}

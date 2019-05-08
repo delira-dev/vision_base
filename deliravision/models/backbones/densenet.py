@@ -5,7 +5,7 @@ if "TORCH" in get_backends():
     from torch.nn import functional as F
     from collections import OrderedDict
     from ..utils import ConvNdTorch, PoolingNdTorch, NormNdTorch
-    from ..basic_networks import BaseClassificationPyTorchNetwork
+    from ..basic_networks import BaseClassificationTorchNetwork
 
 
     class _DenseLayerTorch(torch.nn.Sequential):
@@ -45,8 +45,8 @@ if "TORCH" in get_backends():
             for i in range(num_layers):
 
                 layer = _DenseLayerTorch(num_input_features + i * growth_rate,
-                                         growth_rate, bn_size, drop_rate, n_dim,
-                                         norm_type)
+                                           growth_rate, bn_size, drop_rate, n_dim,
+                                           norm_type)
 
                 self.add_module('denselayer%d' % (i + 1), layer)
 
@@ -66,7 +66,7 @@ if "TORCH" in get_backends():
                                                    output_size=2))
 
 
-    class DenseNetPyTorch(BaseClassificationPyTorchNetwork):
+    class DenseNetTorch(BaseClassificationTorchNetwork):
         r"""Densenet-BC model class, based on
         `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_
         Args:
@@ -90,7 +90,7 @@ if "TORCH" in get_backends():
 
         def _build_model(self, growth_rate, block_config, num_init_features,
                          bn_size, drop_rate, num_classes, n_dim, pool_type,
-                         norm_type):
+                         norm_type) -> None:
 
             # First convolution
             self.features = torch.nn.Sequential(OrderedDict([
@@ -106,10 +106,10 @@ if "TORCH" in get_backends():
             num_features = num_init_features
             for i, num_layers in enumerate(block_config):
                 block = _DenseBlockTorch(num_layers=num_layers,
-                                         num_input_features=num_features,
-                                         bn_size=bn_size, growth_rate=growth_rate,
-                                         drop_rate=drop_rate, n_dim=n_dim,
-                                         norm_type=norm_type)
+                                           num_input_features=num_features,
+                                           bn_size=bn_size, growth_rate=growth_rate,
+                                           drop_rate=drop_rate, n_dim=n_dim,
+                                           norm_type=norm_type)
 
                 self.features.add_module('denseblock%d' % (i + 1), block)
                 num_features = num_features + num_layers * growth_rate
@@ -143,9 +143,9 @@ if "TORCH" in get_backends():
                 elif isinstance(m, torch.nn.Linear):
                     torch.nn.init.constant_(m.bias, 0)
 
-        def forward(self, x):
+        def forward(self, x) -> dict:
             features = self.features(x)
             out = F.relu(features, inplace=True)
             out = self.pool(out).view(x.size(0), -1)
             out = self.classifier(out)
-            return out
+            return {"pred": out}

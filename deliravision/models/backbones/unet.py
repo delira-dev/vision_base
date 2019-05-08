@@ -5,12 +5,12 @@ if "TORCH" in get_backends():
     import torch
     from torch.nn import functional as F
 
-    from ..basic_networks import BaseSegmentationPyTorchNetwork
+    from ..basic_networks import BaseSegmentationTorchNetwork
 
 
-    class UNetPyTorch(BaseSegmentationPyTorchNetwork):
+    class UNetTorch(BaseSegmentationTorchNetwork):
         """
-        The :class:`UNetPyTorch` is a convolutional encoder-decoder neural
+        The :class:`UNetTorch` is a convolutional encoder-decoder neural
         network.
         Contextual spatial information (from the decoding,
         expansive pathway) about an input tensor is merged with
@@ -134,7 +134,7 @@ if "TORCH" in get_backends():
             for i, m in enumerate(self.modules()):
                 self.weight_init(m)
 
-        def forward(self, x):
+        def forward(self, x) -> dict:
             """
             Feed tensor through network
             Parameters
@@ -160,10 +160,10 @@ if "TORCH" in get_backends():
             # torch.nn.CrossEntropyLoss is your training script,
             # as this module includes a softmax already.
             x = self.conv_final(x)
-            return x
+            return {"pred": x}
 
         def _build_model(self, n_dim, num_classes, in_channels=1, depth=5,
-                         start_filts=64):
+                         start_filts=64) -> None:
             """
             Builds the actual model
             Parameters
@@ -331,4 +331,4 @@ if "TORCH" in get_backends():
             self.down_convs = torch.nn.ModuleList(self.down_convs)
             self.up_convs = torch.nn.ModuleList(self.up_convs)
 
-    LinkNetPyTorch = UNetPyTorch
+    LinkNetTorch = UNetTorch

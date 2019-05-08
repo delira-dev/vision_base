@@ -4,7 +4,7 @@ import copy
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, NormNdTorch, PoolingNdTorch
-    from ..basic_networks import BaseClassificationPyTorchNetwork
+    from ..basic_networks import BaseClassificationTorchNetwork
 
 
     def conv3x3(in_planes, out_planes, stride=1, n_dim=2):
@@ -95,7 +95,7 @@ if "TORCH" in get_backends():
             return out
 
 
-    class ResNetTorch(BaseClassificationPyTorchNetwork):
+    class ResNetTorch(BaseClassificationTorchNetwork):
         def __init__(self, block, layers, num_classes=1000, in_channels=3,
                      zero_init_residual=False, norm_layer="Batch", n_dim=2,
                      start_filts=64):
@@ -103,7 +103,8 @@ if "TORCH" in get_backends():
                              zero_init_residual, norm_layer, n_dim, start_filts)
 
         def _build_model(self, block, layers, num_classes, in_channels,
-                         zero_init_residual, norm_layer, n_dim, start_filts):
+                         zero_init_residual, norm_layer, n_dim,
+                         start_filts) -> None:
             self.start_filts = start_filts
             self.inplanes = copy.copy(start_filts)
             self.conv1 = ConvNdTorch(n_dim, in_channels, self.inplanes,
@@ -175,7 +176,7 @@ if "TORCH" in get_backends():
 
             return torch.nn.Sequential(*layers)
 
-        def forward(self, x):
+        def forward(self, x) -> dict:
             x = self.conv1(x)
             x = self.bn1(x)
             x = self.relu(x)
@@ -187,4 +188,4 @@ if "TORCH" in get_backends():
             x = self.avgpool(x)
             x = x.view(x.size(0), -1)
             x = self.fc(x)
-            return x
+            return {"pred": x}

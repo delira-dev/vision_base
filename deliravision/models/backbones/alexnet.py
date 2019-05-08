@@ -3,14 +3,15 @@ from delira import get_backends
 if "TORCH" in get_backends():
     import torch
     from ..utils import ConvNdTorch, PoolingNdTorch
-    from ..basic_networks import BaseClassificationPyTorchNetwork
+    from ..basic_networks import BaseClassificationTorchNetwork
 
-    class AlexNetPyTorch(BaseClassificationPyTorchNetwork):
+    class AlexNetTorch(BaseClassificationTorchNetwork):
         def __init__(self, num_classes=1000, in_channels=3, n_dim=2,
                      pool_type="Max"):
             super().__init__(num_classes, in_channels, n_dim, pool_type)
 
-        def _build_model(self, num_classes, in_channels, n_dim, pool_type):
+        def _build_model(self, num_classes, in_channels, n_dim,
+                         pool_type) -> None:
             self.features = torch.nn.Sequential(
                 ConvNdTorch(n_dim, in_channels, 64, kernel_size=11, stride=4,
                             padding=2),
@@ -38,9 +39,9 @@ if "TORCH" in get_backends():
                 torch.nn.Linear(4096, num_classes),
             )
 
-        def forward(self, x):
+        def forward(self, x) -> dict:
             x = self.features(x)
             x = self.avgpool(x)
             x = x.view(x.size(0), -1)
             x = self.classifier(x)
-            return x
+            return {"pred": x}
