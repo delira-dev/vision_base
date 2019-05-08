@@ -10,30 +10,30 @@ class TestBackbones(unittest.TestCase):
 
         if "TORCH" in get_backends():
             # ToDO: Add MobileNet to tests
-            from deliravision.models.backbones import  SqueezeNetTorch, AlexNetPyTorch
+            from deliravision.models.backbones import SqueezeNetTorch, AlexNetTorch
             from deliravision.models.model_fns import create_vgg_torch, create_resnet_torch, create_densenet_torch, \
                 create_resnext_torch, create_seresnext_torch, create_seresnet_torch
 
             test_cases.append({
                 "network_cls": SqueezeNetTorch,
-                "network_kwargs": {'version':1.0, "num_classes":1000,
-                                   "in_channels":3, "n_dim":2,
-                                   "pool_type":"Max", "p_dropout":0.5},
+                "network_kwargs": {'version': 1.0, "num_classes": 1000,
+                                   "in_channels": 3, "n_dim": 2,
+                                   "pool_type": "Max", "p_dropout": 0.5},
                 "input_shape": (5, 3, 224, 224),
                 "name": "SqueezeNet1.0"
             })
             test_cases.append({
                 "network_cls": SqueezeNetTorch,
-                "network_kwargs": {'version':1.1, "num_classes":1000,
-                                   "in_channels":3, "n_dim":2,
-                                   "pool_type":"Max", "p_dropout":0.5},
+                "network_kwargs": {'version': 1.1, "num_classes": 1000,
+                                   "in_channels": 3, "n_dim": 2,
+                                   "pool_type": "Max", "p_dropout": 0.5},
                 "input_shape": (5, 3, 224, 224),
                 "name": "SqueezeNet1.1"
             })
             test_cases.append({
-                "network_cls": AlexNetPyTorch,
+                "network_cls": AlexNetTorch,
                 "network_kwargs": {"num_classes":1000, "in_channels":3,
-                                  "n_dim":2, "pool_type":"Max"},
+                                   "n_dim":2, "pool_type":"Max"},
                 "input_shape": (5, 3, 224, 224),
                 "name": "AlexNet"
             })
@@ -245,12 +245,16 @@ class TestBackbones(unittest.TestCase):
                     input_tensor = torch.rand(case["input_shape"]
                                               ).to(device)
 
-                    _ = model(input_tensor)
+                    result = model(input_tensor)
+
+                    self.assertIsInstance(result, dict)
+
                     if gpu_available:
                         torch.cuda.synchronize()
                         torch.cuda.empty_cache()
                     del model
                     del input_tensor
+                    del result
                     gc.collect()
                     print("\t%s" % case["name"])
 
