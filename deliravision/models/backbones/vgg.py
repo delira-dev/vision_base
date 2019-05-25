@@ -30,8 +30,8 @@ if "TORCH" in get_backends():
                 torch.nn.Dropout(),
                 torch.nn.Linear(4096, num_classes),
             )
-            if init_weights:
-                self._initialize_weights()
+            # if init_weights:
+            #     self._initialize_weights()
 
         def forward(self, x) -> dict:
             x = self.features(x)

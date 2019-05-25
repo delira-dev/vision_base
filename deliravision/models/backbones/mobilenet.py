@@ -104,21 +104,21 @@ if "TORCH" in get_backends():
             self.squeeze_dims = list(range(2, n_dim+2))
 
             # weight initialization
-            for m in self.modules():
-                if isinstance(m, ConvNdTorch):
-                    torch.nn.init.kaiming_normal_(m.conv.weight, mode='fan_out')
-                    if m.conv.bias is not None:
-                        torch.nn.init.zeros_(m.conv.bias)
-                elif isinstance(m,  NormNdTorch):
-                    if hasattr(m.norm, "weight") and m.norm.weight is not None:
-                        torch.nn.init.ones_(m.norm.weight)
-
-                    if hasattr(m.norm, "bias") and m.norm.bias is not None:
-                        torch.nn.init.zeros_(m.norm.bias)
-
-                elif isinstance(m, torch.nn.Linear):
-                    torch.nn.init.normal_(m.weight, 0, 0.01)
-                    torch.nn.init.zeros_(m.bias)
+            # for m in self.modules():
+            #     if isinstance(m, ConvNdTorch):
+            #         torch.nn.init.kaiming_normal_(m.conv.weight, mode='fan_out')
+            #         if m.conv.bias is not None:
+            #             torch.nn.init.zeros_(m.conv.bias)
+            #     elif isinstance(m,  NormNdTorch):
+            #         if hasattr(m.norm, "weight") and m.norm.weight is not None:
+            #             torch.nn.init.ones_(m.norm.weight)
+            #
+            #         if hasattr(m.norm, "bias") and m.norm.bias is not None:
+            #             torch.nn.init.zeros_(m.norm.bias)
+            #
+            #     elif isinstance(m, torch.nn.Linear):
+            #         torch.nn.init.normal_(m.weight, 0, 0.01)
+            #         torch.nn.init.zeros_(m.bias)
 
         def forward(self, x) -> dict:
             x = self.features(x)

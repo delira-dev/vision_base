@@ -133,29 +133,29 @@ if "TORCH" in get_backends():
             self.avgpool = PoolingNdTorch("AdaptiveAvg", n_dim, 1)
             self.fc = torch.nn.Linear(self.inplanes, num_classes)
 
-            for m in self.modules():
-                if isinstance(m, ConvNdTorch):
-                    torch.nn.init.kaiming_normal_(m.conv.weight,
-                                                  mode='fan_out',
-                                                  nonlinearity='relu')
-
-                elif isinstance(m, NormNdTorch):
-                    if hasattr(m.norm, "weight") and m.norm.weight is not None:
-                        torch.nn.init.constant_(m.norm.weight, 1)
-                    if hasattr(m.norm, "bias") and m.norm.bias is not None:
-                        torch.nn.init.constant_(m.norm.bias, 0)
-
+            # for m in self.modules():
+            #     if isinstance(m, ConvNdTorch):
+            #         torch.nn.init.kaiming_normal_(m.conv.weight,
+            #                                       mode='fan_out',
+            #                                       nonlinearity='relu')
+            #
+            #     elif isinstance(m, NormNdTorch):
+            #         if hasattr(m.norm, "weight") and m.norm.weight is not None:
+            #             torch.nn.init.constant_(m.norm.weight, 1)
+            #         if hasattr(m.norm, "bias") and m.norm.bias is not None:
+            #             torch.nn.init.constant_(m.norm.bias, 0)
+            #
             # Zero-initialize the last BN in each residual branch,
             # so that the residual branch starts with zeros, and each
             # residual block behaves like an identity.
             # This improves the model by 0.2~0.3% according to
             # https://arxiv.org/abs/1706.02677
-            if zero_init_residual:
-                for m in self.modules():
-                    if isinstance(m, BottleneckTorch):
-                        torch.nn.init.constant_(m.bn3.norm.weight, 0)
-                    elif isinstance(m, BasicBlockTorch):
-                        torch.nn.init.constant_(m.bn2.norm.weight, 0)
+            # if zero_init_residual:
+            #     for m in self.modules():
+            #         if isinstance(m, BottleneckTorch):
+            #             torch.nn.init.constant_(m.bn3.norm.weight, 0)
+            #         elif isinstance(m, BasicBlockTorch):
+            #             torch.nn.init.constant_(m.bn2.norm.weight, 0)
 
         def _make_layer(self, block, planes, blocks, stride=1, norm_layer="Batch",
                         n_dim=2):
