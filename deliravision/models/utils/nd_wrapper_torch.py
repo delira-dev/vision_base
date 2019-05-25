@@ -1,10 +1,20 @@
 from delira import get_backends
+import abc
 
 if "TORCH" in get_backends():
 
     import torch
 
-    class ConvWrapper(torch.nn.Module):
+    class _WrapperTransformerBase:
+        @abc.abstractmethod
+        def __init__(self, target_instance):
+
+            # Transforms class type and arguments from subclasses
+            self.__class__ = target_instance.__class__
+            self.__dict__ = target_instance.__dict__
+
+
+    class ConvWrapper(_WrapperTransformerBase):
         """
         Convolution Wrapper to Switch accross dimensions and transposed by a
         single argument
@@ -58,7 +68,6 @@ if "TORCH" in get_backends():
                 whether the convolution should be transposed or not
 
             """
-            super().__init__()
 
             if transposed:
                 transposed_str = "Transpose"
@@ -67,32 +76,17 @@ if "TORCH" in get_backends():
 
             conv_cls = getattr(torch.nn, "Conv%s%dd" % (transposed_str, n_dim))
 
-            self.conv = conv_cls(
+            instance = conv_cls(
                 in_channels=in_channels, out_channels=out_channels,
                 kernel_size=kernel_size, stride=stride, padding=padding,
                 dilation=dilation, groups=groups, bias=bias, **kwargs)
 
-        def forward(self, x: torch.Tensor):
-            """
-            Calls the actual convolution's forward
-
-            Parameters
-            ----------
-            x : :class:`torch.Tensor`
-                input tensor
-
-            Returns
-            -------
-            :class:`torch.Tensor`
-                the convolved input
-
-            """
-            return self.conv(x)
+            super().__init__(instance)
 
 
-    class PoolingWrapper(torch.nn.Module):
+    class PoolingWrapper(_WrapperTransformerBase):
         """
-        Wrapper to switch between different pooling types and convolutions by a
+        Wrapper to switch between different pooling types by a
         single argument
 
         See Also
@@ -149,31 +143,18 @@ if "TORCH" in get_backends():
                 keyword arguments of the chosen pooling class
 
             """
-            super().__init__()
+
+            if n_dim is None:
+                n_dim = ""
 
             pool_cls = getattr(torch.nn, "%sPool%dd" % (pooling_type, n_dim))
 
-            self.pool = pool_cls(*args, **kwargs)
+            instance = pool_cls(*args, **kwargs)
 
-        def forward(self, x: torch.Tensor):
-            """
-            Calls the actual pooling's forward
-
-            Parameters
-            ----------
-            x : :class:`torch.Tensor`
-                input tensor
-
-            Returns
-            -------
-            :class:`torch.Tensor`
-                the pooled input
-
-            """
-            return  self.pool(x)
+            super().__init__(instance)
 
 
-    class NormWrapper(torch.nn.Module):
+    class NormWrapper(_WrapperTransformerBase):
         """
         Wrapper to switch between different types of normalization and
         dimensions by a single argument
@@ -229,7 +210,6 @@ if "TORCH" in get_backends():
                 keyword arguments of chosen normalization class
 
             """
-            super().__init__()
 
             if n_dim is None:
                 dim_str = ""
@@ -237,32 +217,21 @@ if "TORCH" in get_backends():
                 dim_str = str(n_dim)
 
             norm_cls = getattr(torch.nn, "%sNorm%sd" % (norm_type, dim_str))
-            self.norm = norm_cls(*args, **kwargs)
+            instance = norm_cls(*args, **kwargs)
 
-        def forward(self, x: torch.Tensor):
-            """
-            Calls the actual normalization's forward
-
-            Parameters
-            ----------
-            x : :class:`torch.Tensor`
-                input tensor
-
-            Returns
-            -------
-            :class:`torch.Tensor`
-                the normalized input
-
-            """
-            return self.norm(x)
+            super().__init__(instance)
 
 
-    class DropoutWrapper(torch.nn.Module):
-        def __init__(self, n_dim, p=0.5, inplace=False):
-            super().__init__()
-            dropout_cls = getattr(torch.nn, "Dropout%dd" % n_dim)
-            self.dropout = dropout_cls(p=p, inplace=inplace)
+    class DropoutWrapper(_WrapperTransformerBase):
+        def __init__(self, n_dim, p=0.5, inplace=False, form=None):
 
-        def forward(self, x):
-            return self.dropout(x)
+            if form is None or not form:
+                form = ""
+                n_dim = str(n_dim)
+            else:
+                n_dim = ""
+
+            dropout_cls = getattr(torch.nn, "%sDropout%sd" % (form, n_dim))
+            instance = dropout_cls(p=p, inplace=inplace)
+            super().__init__(instance)
 
