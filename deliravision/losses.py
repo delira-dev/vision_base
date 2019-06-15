@@ -173,8 +173,8 @@ if "TORCH" in get_backends():
             nn_loss = self.nnloss_fn(inp_log, target)
 
             target_onehot = make_onehot_torch(target, n_classes=n_classes)
-            focal_weights = (
-                (1 - inp) * target_onehot.to(torch.float)).sum(dim=1) ** self.gamma
+            focal_weights = ((1 - inp) * target_onehot.to(
+                torch.float)).sum(dim=1) ** self.gamma
             focal_loss = focal_weights * nn_loss
             if self.reduction == 'elementwise_mean':
                 return torch.mean(focal_loss)
@@ -197,8 +197,8 @@ if "TORCH" in get_backends():
             inp = F.softmax(inp, dim=1)
 
             target_onehot = make_onehot_torch(target, n_classes=n_classes)
-            focal_weights = (
-                (1 - inp) * target_onehot.to(torch.float)).sum(dim=1) ** self.gamma
+            focal_weights = ((1 - inp) * target_onehot.to(
+                torch.float)).sum(dim=1) ** self.gamma
             focal_loss = focal_weights * ce_loss
             if self.reduction == 'elementwise_mean':
                 return torch.mean(focal_loss)
@@ -281,14 +281,13 @@ if "TORCH" in get_backends():
                 weight = torch.from_numpy(self.weight).to(dtype=inp.dtype,
                                                           device=inp.device)
                 frac = weight * frac
-            dice_loss = - (2 / n_classes) * frac
 
             if self.reduction == 'elementwise_mean':
-                return torch.mean(dice_loss)
+                return torch.mean(frac)
             if self.reduction == 'none':
-                return dice_loss
+                return frac
             if self.reduction == 'sum':
-                return torch.sum(dice_loss)
+                return torch.sum(frac)
             raise AttributeError('Reduction parameter unknown.')
 
     class TverskyLossPytorch(nn.Module):
@@ -328,10 +327,11 @@ if "TORCH" in get_backends():
                 fn = fn ** 2
 
             # compute nominator
-            nom = torch.sum(tp, dim=dims) + self.smooth
+            tp_sum = torch.sum(tp, dim=dims)
+            nom = tp_sum + self.smooth
 
             # compute denominator
-            denom = nom + self.alpha * torch.sum(fn, dim=dims) + \
+            denom = tp_sum + self.alpha * torch.sum(fn, dim=dims) + \
                 self.beta * torch.sum(fp, dim=dims) + self.smooth
 
             # compute loss
@@ -340,14 +340,13 @@ if "TORCH" in get_backends():
                 weight = torch.from_numpy(self.weight).to(dtype=pred.dtype,
                                                           device=pred.device)
                 frac = weight * frac
-            tversky_loss = - (1 / n_classes) * frac
 
             if self.reduction == 'elementwise_mean':
-                return torch.mean(tversky_loss)
+                return torch.mean(frac)
             if self.reduction == 'none':
-                return tversky_loss
+                return frac
             if self.reduction == 'sum':
-                return torch.sum(tversky_loss)
+                return torch.sum(frac)
             raise AttributeError('Reduction parameter unknown.')
 
     class FocalTverskyLossPytorch(nn.Module):
@@ -363,6 +362,7 @@ if "TORCH" in get_backends():
             self.reduction = reduction
 
         def forward(self, pred, target):
+            n_classes = pred.shape[1]
             tversky_loss = self.tversky_loss_fn(pred, target)
             focal_tversky_loss = tversky_loss ** self.gamma
 
