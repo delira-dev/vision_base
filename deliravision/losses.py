@@ -210,7 +210,7 @@ if "TORCH" in get_backends():
 
     class SoftDiceLossPyTorch(nn.Module):
         def __init__(self, square_nom=False, square_denom=False, weight=None,
-                     smooth=1., reduction="elementwise_mean"):
+                     smooth=1., reduction="elementwise_mean", non_lin=None):
             """
             SoftDice Loss
 
@@ -236,6 +236,7 @@ if "TORCH" in get_backends():
                 self.weight = None
 
             self.reduction = reduction
+            self.non_lin = non_lin
 
         def forward(self, inp, target):
             """
@@ -253,34 +254,44 @@ if "TORCH" in get_backends():
             torch.Tensor
                 loss
             """
+            # number of classes for onehot
             n_classes = inp.shape[1]
-            dims = tuple(range(2, inp.dim()))
             target_onehot = make_onehot_torch(target, n_classes=n_classes)
+            # sum over spatial dimensions
+            dims = tuple(range(2, inp.dim()))
+
+            # apply nonlinearity
+            if self.non_lin is not None:
+                inp = self.non_lin(inp)
 
             # compute nominator
             if self.square_nom:
-                nom = torch.sum((inp * target_onehot.float())**2, dim=dims)
+                nom = torch.sum((inp * target_onehot.float()) ** 2, dim=dims)
             else:
                 nom = torch.sum(inp * target_onehot.float(), dim=dims)
-            nom = nom + self.smooth
+            nom = 2 * nom + self.smooth
 
             # compute denominator
             if self.square_denom:
-                i_sum = torch.sum(inp**2, dim=dims)
-                t_sum = torch.sum(target_onehot**2, dim=dims)
+                i_sum = torch.sum(inp ** 2, dim=dims)
+                t_sum = torch.sum(target_onehot ** 2, dim=dims)
             else:
                 i_sum = torch.sum(inp, dim=dims)
                 t_sum = torch.sum(target_onehot, dim=dims)
 
-            denom = i_sum + t_sum.float()
-            denom = denom + self.smooth
+            denom = i_sum + t_sum.float() + self.smooth
 
             # compute loss
-            frac = torch.sum(nom / denom, dim=1)
+            frac = nom / denom
+
+            # apply weight for individual classesproperly
             if self.weight is not None:
                 weight = torch.from_numpy(self.weight).to(dtype=inp.dtype,
                                                           device=inp.device)
                 frac = weight * frac
+
+            # average over classes
+            frac = - torch.mean(frac, dim=1)
 
             if self.reduction == 'elementwise_mean':
                 return torch.mean(frac)
@@ -293,7 +304,7 @@ if "TORCH" in get_backends():
     class TverskyLossPytorch(nn.Module):
         def __init__(self, alpha=0.5, beta=0.5, square_nom=False,
                      square_denom=False, weight=None, smooth=1.,
-                     reduction="elementwise_mean"):
+                     reduction="elementwise_mean", non_lin=None):
             super().__init__()
             self.alpha = alpha
             self.beta = beta
@@ -308,10 +319,14 @@ if "TORCH" in get_backends():
                 self.weight = None
 
             self.reduction = reduction
+            self.non_lin = non_lin
 
         def forward(self, pred, target):
             n_classes = pred.shape[1]
             dims = tuple(range(2, pred.dim()))
+
+            if self.non_lin is not None:
+                pred = self.non_lin(pred)
 
             target_onehot = make_onehot_torch(target, n_classes=n_classes)
             target_onehot = target_onehot.float()
@@ -335,30 +350,35 @@ if "TORCH" in get_backends():
                 self.beta * torch.sum(fp, dim=dims) + self.smooth
 
             # compute loss
-            frac = torch.sum(nom / denom, dim=1)
+            frac = nom / denom
+
+            # apply weights to individual classes
             if self.weight is not None:
                 weight = torch.from_numpy(self.weight).to(dtype=pred.dtype,
                                                           device=pred.device)
                 frac = weight * frac
 
+            # average over classes
+            frac = 1 - torch.mean(frac, dim=1)
+
             if self.reduction == 'elementwise_mean':
-                return torch.mean(frac)
+                return torch.mean(-frac)
             if self.reduction == 'none':
-                return frac
+                return -frac
             if self.reduction == 'sum':
-                return torch.sum(frac)
+                return torch.sum(-frac)
             raise AttributeError('Reduction parameter unknown.')
 
     class FocalTverskyLossPytorch(nn.Module):
         def __init__(self, gamma=1.33, alpha=0.5, beta=0.5, square_nom=False,
                      square_denom=False, weight=None, smooth=1.,
-                     reduction="elementwise_mean"):
+                     reduction="elementwise_mean", non_lin=None):
             super().__init__()
             self.gamma = gamma
             self.tversky_loss_fn = \
                 TverskyLossPytorch(alpha, beta, square_nom,
                                    square_denom, weight, smooth,
-                                   reduction='none')
+                                   reduction='none', non_lin=non_lin)
             self.reduction = reduction
 
         def forward(self, pred, target):
