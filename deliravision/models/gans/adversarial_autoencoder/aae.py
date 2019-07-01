@@ -1,4 +1,5 @@
-from gans.adversarial_autoencoder.models import Generator, Discriminator
+from deliravision.models.gans.adversarial_autoencoder.models import \
+    Generator, Discriminator
 
 from delira.models import AbstractPyTorchNetwork
 import torch

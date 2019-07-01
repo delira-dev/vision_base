@@ -1,4 +1,5 @@
-from gans.auxiliary_classifier.models import Generator, Discriminator
+from deliravision.models.gans.auxiliary_classifier.models import \
+    Generator, Discriminator
 import torch
 
 from delira.models import AbstractPyTorchNetwork

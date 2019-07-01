@@ -1,5 +1,6 @@
 from delira.models import AbstractPyTorchNetwork
-from gans.boundary_equilibrium.models import Generator, Discriminator
+from deliravision.models.gans.boundary_equilibrium.models import \
+    Generator, Discriminator
 
 import torch
 
