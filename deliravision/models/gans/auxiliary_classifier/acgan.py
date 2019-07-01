@@ -13,12 +13,16 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
     --------
     `Paper <https://arxiv.org/abs/1610.09585>`_
 
-    Notes
-    -----
-    This network always returns all necessary predictions from generator and
-    discriminator as a dict. If it should be used for prediction only, it may
-    be useful to separate generator and disciminator and to only use the
-    desired model
+    Warnings
+    --------
+    This Network is designed for training only; if you want to predict from an
+    already trained network, it might be best, to split this network into its
+    parts (i. e. separating the discriminator from the generator). This will
+    give a significant boost in inference speed and a significant decrease in
+    memory consumption, since no memory is allocated for additional weights of
+    the unused parts and no inference is done for them. If this whole network
+    is used, inferences might be done multiple times per network, to obtain
+    all necessary (intermediate) outputs for training.
 
     """
 

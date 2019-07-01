@@ -5,8 +5,43 @@ import torch
 
 
 class BoundarySeekingGAN(AbstractPyTorchNetwork):
+    """
+    A Basic Implementation of the boundary seeking generative adversarial
+    networks with variable generator and discriminator class
+
+    See Also
+    --------
+    `Paper <https://arxiv.org/abs/1702.08431>`_
+
+    Warnings
+    --------
+    This Network is designed for training only; if you want to predict from an
+    already trained network, it might be best, to split this network into its
+    parts (i. e. separating the discriminator from the generator). This will
+    give a significant boost in inference speed and a significant decrease in
+    memory consumption, since no memory is allocated for additional weights of
+    the unused parts and no inference is done for them. If this whole network
+    is used, inferences might be done multiple times per network, to obtain
+    all necessary (intermediate) outputs for training.
+
+    """
     def __init__(self, latent_dim, img_shape, generator_cls=Generator,
                  discriminator_cls=Discriminator):
+        """
+
+        Parameters
+        ----------
+        latent_dim : int
+            the size of the latent dimension
+        img_shape : tuple
+            the shape of image batches (including channel-dimension, excluding
+            batch-dimension)
+        generator_cls :
+            the class implementing the actual generator topology
+        discriminator_cls :
+            the class implementing the actual discriminator topology
+
+        """
         super().__init__()
         self.generator = generator_cls(latent_dim, img_shape)
         self.discriminator = discriminator_cls(img_shape)

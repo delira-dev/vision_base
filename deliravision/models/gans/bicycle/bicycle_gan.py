@@ -12,13 +12,16 @@ class BiCycleGAN(AbstractPyTorchNetwork):
     --------
     `Paper <https://arxiv.org/abs/1711.11586>`_
 
-    Notes
-    -----
-    When being called, this network returns a dict containing all intermediate
-    values, that are necessary for loss calculation and training. To reduce the
-    memory consumption and increase the inference speed, it could be helpful
-    to split this model into several parts and to only use the necessary part
-    for prediction (in most cases the generator)
+    Warnings
+    --------
+    This Network is designed for training only; if you want to predict from an
+    already trained network, it might be best, to split this network into its
+    parts (i. e. separating the discriminator from the generator). This will
+    give a significant boost in inference speed and a significant decrease in
+    memory consumption, since no memory is allocated for additional weights of
+    the unused parts and no inference is done for them. If this whole network
+    is used, inferences might be done multiple times per network, to obtain
+    all necessary (intermediate) outputs for training.
 
     """
     def __init__(self, latent_dim, img_shape,

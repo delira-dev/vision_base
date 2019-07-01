@@ -14,11 +14,16 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
     --------
     `Paper <https://arxiv.org/abs/1511.05644>`_
 
-    Notes
-    -----
-    This module will always return all outputs when forwarded, if it should be
-    used for prediction later, it must probably be divided into generator and
-    discriminator (or even encoder, decoder and discriminator)
+    Warnings
+    --------
+    This Network is designed for training only; if you want to predict from an
+    already trained network, it might be best, to split this network into its
+    parts (i. e. separating the discriminator from the generator). This will
+    give a significant boost in inference speed and a significant decrease in
+    memory consumption, since no memory is allocated for additional weights of
+    the unused parts and no inference is done for them. If this whole network
+    is used, inferences might be done multiple times per network, to obtain
+    all necessary (intermediate) outputs for training.
 
     """
     def __init__(self, latent_dim, img_shape, generator_cls=Generator,
@@ -73,37 +78,37 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
     def closure(model, data_dict: dict, optimizers: dict, losses=None,
                 metrics=None, fold=0, **kwargs):
         """
-       Function which handles prediction from batch, logging, loss calculation
-       and optimizer step
+        Function which handles prediction from batch, logging, loss calculation
+        and optimizer step
 
-       Parameters
-       ----------
-       model : :class:`delira.models.AbstractPyTorchNetwork`
+        Parameters
+        ----------
+        model : :class:`delira.models.AbstractPyTorchNetwork`
            model to forward data through
-       data_dict : dict
+        data_dict : dict
            dictionary containing the data
-       optimizers : dict
+        optimizers : dict
            dictionary containing all optimizers to perform parameter update
-       losses : dict
+        losses : dict
            Functions or classes to calculate losses
-       metrics : dict
+        metrics : dict
            Functions or classes to calculate other metrics
-       fold : int
+        fold : int
            Current Fold in Crossvalidation (default: 0)
-       kwargs : dict
+        kwargs : dict
            additional keyword arguments
 
-       Returns
-       -------
-       dict
+        Returns
+        -------
+        dict
            Metric values (with same keys as input dict metrics); will always
            be empty here
-       dict
+        dict
            Loss values (with same keys as input dict losses)
-       dict
+        dict
            Arbitrary number of predictions
 
-       """
+        """
 
         loss_vals, metric_vals = {}, {}
 

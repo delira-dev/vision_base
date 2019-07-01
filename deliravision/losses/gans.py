@@ -183,7 +183,12 @@ class MultiResolutionLoss(torch.nn.Module):
 
 
 class BoundarySeekingLoss(AdversarialLoss):
-    """"""
+    """
+    Boundary Seeking Loss from
+    `Boundary-Seeking Generative Adversarial Networks
+    <https://arxiv.org/abs/1702.08431>`_
+
+    """
     def __init__(self):
         def boundary_seeking_loss(pred, gt):
             return torch.mean((torch.log(pred) - torch.log(1-pred)) ** 2)
