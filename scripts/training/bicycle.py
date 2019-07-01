@@ -15,8 +15,7 @@ def train_bicycle(params, dset, save_path):
 
     mgr_train = BaseDataManager(dset_train, params.nested_get("batchsize"),
                                 transforms=None, n_process_augmentation=4)
-    params.fixed.model.n_classes = len(dset_train.data.classes)
-    params.fixed.model.n_channels = dset_train[0]["data"].shape[1]
+    params.fixed.model.img_shape = dset_train[0]["data"].shape[1:]
 
     mgr_val = BaseDataManager(dset_val, params.nested_get("batchsize"),
                               transforms=None, n_process_augmentation=4)
@@ -56,8 +55,7 @@ if __name__ == '__main__':
 
     params = Parameters(fixed_params={
         "model": {
-            "latent_dim": 100,
-            "img_size": args.img_size
+            "latent_dim": 100
         },
         "training": {
             "optim_cls": torch.optim.Adam,
