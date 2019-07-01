@@ -1,2 +1,3 @@
-from gans.auxiliary_classifier.acgan import AuxiliaryClassifierGANPyTorch
+from deliravision.models.gans.auxiliary_classifier.acgan import \
+    AuxiliaryClassifierGANPyTorch
 

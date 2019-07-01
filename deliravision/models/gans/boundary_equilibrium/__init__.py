@@ -1,1 +1,2 @@
-from gans.boundary_equilibrium.began import BoundaryEquilibriumGAN
+from deliravision.models.gans.boundary_equilibrium.began import \
+    BoundaryEquilibriumGAN

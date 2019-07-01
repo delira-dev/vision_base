@@ -23,7 +23,31 @@ class BiCycleGAN(AbstractPyTorchNetwork):
     """
     def __init__(self, latent_dim, img_shape,
                  generator_cls=Generator, encoder_cls=Encoder,
-                 discriminator_cls=MultiResolutionDiscriminator):
+                 discriminator_cls=MultiResolutionDiscriminator,
+                 lambda_pixel=10., lambda_latent=0.5, lambda_kl=0.01):
+        """
+
+        Parameters
+        ----------
+        latent_dim : int
+            the size of the latent dimension
+        img_shape : tuple
+            the shape of the input images (including channel-dimension,
+            excluding batch-dimension)
+        generator_cls :
+            class/function implementing the actual generator topology
+        encoder_cls :
+            class/function implementing the actual encoder topology
+        discriminator_cls :
+            class/function implementing the actual discriminator topology
+        lambda_pixel : float
+            weight for the pixlewise loss
+        lambda_latent : float
+            weight for the latent loss
+        lambda_kl : float
+            weight for the kl divergence
+
+        """
         super().__init__()
 
         self._latent_dim = latent_dim
@@ -33,6 +57,10 @@ class BiCycleGAN(AbstractPyTorchNetwork):
 
         self.discr_vae = discriminator_cls(img_shape[0])
         self.discr_lr = discriminator_cls(img_shape[0])
+
+        self.lambda_pixel = lambda_pixel
+        self.lambda_latent = lambda_latent
+        self.lambda_kl = lambda_kl
 
     @staticmethod
     def reparametrize(mu, logvar):
