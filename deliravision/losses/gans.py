@@ -180,3 +180,12 @@ class MultiResolutionLoss(torch.nn.Module):
             results.append(self._loss_fn(_pred, _gt))
 
         return sum(results)
+
+
+class BoundarySeekingLoss(AdversarialLoss):
+    """"""
+    def __init__(self):
+        def boundary_seeking_loss(pred, gt):
+            return torch.mean((torch.log(pred) - torch.log(1-pred)) ** 2)
+
+        super().__init__(boundary_seeking_loss)

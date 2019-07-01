@@ -143,3 +143,7 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
         return metric_vals, loss_vals, {k: v.detach()
                                         for k, v in predictions.items()}
+
+    @staticmethod
+    def prepare_batch(batch: dict, input_device, output_device):
+        return {"data": batch["data"].to(torch.float).to(input_device)}

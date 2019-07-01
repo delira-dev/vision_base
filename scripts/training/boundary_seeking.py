@@ -1,29 +1,27 @@
-from deliravision.models.gans import BoundaryEquilibriumGAN
+from deliravision.models.gans import BoundarySeekingGAN
 from deliravision.models.gans.utils import create_optims_gan
-from deliravision.losses.gans import AdversarialLoss, BELoss
+from deliravision.losses.gans import BoundarySeekingLoss
+import torch
 from delira.data_loading import TorchvisionClassificationDataset, \
     BaseDataManager
 from delira.training import PyTorchExperiment, Parameters
-import torch
 
 
-def train_be(params, dset, save_path):
-    img_size = params.nested_get("img_size")
+def train_bs(params, dset, save_path, img_size):
+
     dset_train = TorchvisionClassificationDataset(dset,
-                                                  img_shape=(img_size, img_size)
-                                                  )
-    dset_val = TorchvisionClassificationDataset(dset, train=False,
-                                                img_shape=(img_size, img_size))
+                                                  img_shape=(img_size, img_size))
+    dset_val = TorchvisionClassificationDataset(dset, train=False)
+
+    params.fixed.model.img_shape = dset_train[0]["data"].shape[1:]
 
     mgr_train = BaseDataManager(dset_train, params.nested_get("batchsize"),
                                 transforms=None, n_process_augmentation=4)
-    params.fixed.model.n_classes = len(dset_train.data.classes)
-    params.fixed.model.n_channels = dset_train[0]["data"].shape[1]
 
     mgr_val = BaseDataManager(dset_val, params.nested_get("batchsize"),
                               transforms=None, n_process_augmentation=4)
 
-    exp = PyTorchExperiment(params, model_cls=BoundaryEquilibriumGAN,
+    exp = PyTorchExperiment(params, model_cls=BoundarySeekingGAN,
                             n_epochs=params.nested_get("n_epochs"),
                             save_path=save_path,
                             optim_builder=create_optims_gan)
@@ -57,19 +55,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     params = Parameters(fixed_params={
-        "model": {
-            "latent_dim": 100,
-            "img_size": args.img_size
-        },
+        "model": {"latent_dim": 100},
         "training": {
             "optim_cls": torch.optim.Adam,
             "optim_params": {"lr": args.lr, "betas": (args.b1, args.b2)},
             "batchsize": args.batchsize,
             "n_epochs": args.epochs,
-            "losses": {"adversarial": AdversarialLoss(),
-                       "began": BELoss()}
+            "losses": {"boundary_seeking": BoundarySeekingLoss(),
+                       "discriminator": torch.nn.BCELoss()}
         }
     })
 
-    train_be(params, args.dataset, args.savepath)
+    train_bs(params, args.dataset, args.savepath, args.img_size)
 

@@ -170,8 +170,5 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
         """
         return {"data":
                     torch.from_numpy(batch["data"]
-                                     ).to(torch.float).to(input_device),
-                "label":
-                    torch.from_numpy(batch["data"]
-                                     ).to(torch.float).to(output_device)}
+                                     ).to(torch.float).to(input_device)}
 
