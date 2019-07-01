@@ -118,13 +118,65 @@ class AdversarialLoss(torch.nn.Module):
 
 
 class KullbackLeibler(torch.nn.Module):
-
+    """
+    A loss calculating the kullback leibler distance from a given mu and a
+    given logvar
+    """
     def forward(self, mu: torch.Tensor, logvar: torch.Tensor):
+        """
+        Calculates the actual KL divergence
+
+        Parameters
+        ----------
+        mu : :class:`torch.Tensor`
+            the actual mean tensor
+        logvar : :class:`torch.Tensor`
+            the logarithmic variance
+
+        Returns
+        -------
+        :class:`torch.Tensor`
+            the kl divergence
+
+        """
         return (0.5 * torch.exp(logvar).sum() + mu ** 2 - logvar - 1).sum()
 
 
-class IterMSE(torch.nn.Module):
-    def forward(self, pred, gt):
-        if isinstance(gt, bool):
-            gt = int(gt)
-        return sum([torch.mean((_pred - gt) ** 2) for _pred in pred])
+class MultiResolutionLoss(torch.nn.Module):
+    """
+    A loss working on multiple resolutions.
+    """
+    def __init__(self, loss_fn=torch.nn.MSELoss()):
+        super().__init__()
+        self._loss_fn = loss_fn
+
+    def forward(self, pred: list, gt):
+        """
+
+        Parameters
+        ----------
+        pred : list of :class:`torch.Tensor`
+        gt : int or bool or :class:`torch.Tensor` or list of them
+
+        Returns
+        -------
+        :class:`torch.Tensor`
+            the calculated loss value (summed over all resolutions)
+        """
+        results = []
+
+        if not isinstance(gt, list):
+            gt = [gt] * len(pred)
+
+        for _pred, _gt in zip(pred, gt):
+
+            if isinstance(_gt, bool):
+                _gt = int(_gt)
+
+            if not isinstance(_gt, torch.Tensor):
+                _gt = torch.tensor(_gt).to(device=_pred.device,
+                                           dtype=_pred.dtype)
+
+            results.append(self._loss_fn(_pred, _gt))
+
+        return sum(results)
