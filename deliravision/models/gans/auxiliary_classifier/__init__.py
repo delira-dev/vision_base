@@ -1,0 +1,2 @@
+from gans.auxiliary_classifier.acgan import AuxiliaryClassifierGANPyTorch
+
