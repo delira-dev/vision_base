@@ -1,1 +1,3 @@
-# delira-vision
+# Delira-compatible vision package
+
+🚧 under construction 🚧
