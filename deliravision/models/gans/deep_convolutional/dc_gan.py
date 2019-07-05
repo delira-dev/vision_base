@@ -113,7 +113,7 @@ class DeepConvolutionalGAN(AbstractPyTorchNetwork):
             v.zero_grad()
 
         return metric_vals, loss_vals, {k: v.detach()
-                                        for k, v in predictions.items()}
+                                        for k, v in preds.items()}
 
     @staticmethod
     def prepare_batch(batch: dict, input_device, output_device):
