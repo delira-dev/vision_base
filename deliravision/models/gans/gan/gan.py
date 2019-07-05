@@ -5,7 +5,23 @@ import torch
 
 class GenerativeAdversarialNetworks(AbstractPyTorchNetwork):
     """
+    Implementation of the most basic Generative Adversarial Networks for
+    image synthesis with exchangeable generator and discriminator classes
 
+    See Also
+    --------
+    `Paper <https://arxiv.org/abs/1406.2661>`_
+
+    Warnings
+    --------
+    This Network is designed for training only; if you want to predict from an
+    already trained network, it might be best, to split this network into its
+    parts (i. e. separating the discriminator from the generator). This will
+    give a significant boost in inference speed and a significant decrease in
+    memory consumption, since no memory is allocated for additional weights of
+    the unused parts and no inference is done for them. If this whole network
+    is used, inferences might be done multiple times per network, to obtain
+    all necessary (intermediate) outputs for training.
     """
     def __init__(self, latent_dim, img_shape,
                  generator_cls=Generator, discriminator_cls=Discriminator):
