@@ -109,7 +109,8 @@ class GeneratorUNet(torch.nn.Module):
         self.final = torch.nn.Sequential(
             torch.nn.Upsample(scale_factor=2),
             torch.nn.ZeroPad2d((1, 0, 1, 0)),
-            torch.nn.Conv2d(128, num_channels, 4, padding=1), nn.Tanh()
+            torch.nn.Conv2d(128, num_channels, 4, padding=1), 
+            torch.nn.Tanh()
         )
 
     def forward(self, x):
