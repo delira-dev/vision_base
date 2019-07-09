@@ -14,3 +14,7 @@ from deliravision.models.gans.dual import *
 from deliravision.models.gans.energy_based import *
 from deliravision.models.gans.esr import *
 from deliravision.models.gans.gan import *
+
+# make LSGAN a synonym for basic GAN, since training only differs in loss
+# function, which isn't specified here
+LeastSquareGAN = GenerativeAdversarialNetworks
