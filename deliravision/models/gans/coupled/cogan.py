@@ -73,7 +73,8 @@ class CoupledGAN(AbstractPyTorchNetwork):
 
         """
         if noise is None:
-            noise = torch.rand(imgs_a.size(0), self._latent_dim)
+            noise = torch.randn(imgs_a.size(0), self._latent_dim,
+                                device=imgs_a.device, dtype=imgs_a.dtype)
 
         gen_imgs_a, gen_imgs_b = self.generator(noise)
 

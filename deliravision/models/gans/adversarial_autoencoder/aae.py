@@ -68,7 +68,7 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
         """
         results_gen = self.generator(x)
 
-        z = torch.rand(results_gen["encoded"].size())
+        z = torch.randn_like(results_gen["encoded"])
 
         return {**results_gen,
                 "discr_encoded": self.discriminator(results_gen["encoded"]),

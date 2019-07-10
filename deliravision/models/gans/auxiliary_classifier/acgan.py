@@ -112,11 +112,12 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
             "Either real images or noise must be provided"
 
         if noise is None:
-            noise = torch.rand(real_imgs.size(0), self._latent_dim,
+            noise = torch.randn(real_imgs.size(0), self._latent_dim,
                                device=real_imgs.device, dtype=real_imgs.dtype)
 
         if gen_labels is None:
-            gen_labels = torch.randint(0, self._n_classes, (real_imgs.size(0),),
+            gen_labels = torch.randint(0, self._n_classes,
+                                       (real_imgs.size(0),),
                                        device=real_imgs.device)
 
         gen_imgs = self.generator(noise, gen_labels)

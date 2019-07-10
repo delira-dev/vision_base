@@ -92,7 +92,7 @@ class InfoGAN(AbstractPyTorchNetwork):
         """
 
         if z is None:
-            z = torch.rand(imgs.size(0), self._latent_dim, device=imgs.device,
+            z = torch.randn(imgs.size(0), self._latent_dim, device=imgs.device,
                            dtype=imgs.dtype)
 
         if labels is None:

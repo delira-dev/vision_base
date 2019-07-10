@@ -83,7 +83,7 @@ class ConditionalGAN(AbstractPyTorchNetwork):
         """
 
         if z is None:
-            z = torch.rand(x.size(0), self._latent_dim, device=x.device,
+            z = torch.randn(x.size(0), self._latent_dim, device=x.device,
                            dtype=x.dtype)
 
         if gen_labels is None:

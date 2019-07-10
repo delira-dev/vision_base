@@ -76,8 +76,9 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
         """
         if noise is None:
-            noise = torch.rand(x.size(0),
-                               self._latent_dim).to(x.dtype).to(x.device)
+            noise = torch.randn(x.size(0),
+                                self._latent_dim, device=x.device,
+                                dtype=x.dtype)
 
         gen_imgs = self.generator(noise)
 

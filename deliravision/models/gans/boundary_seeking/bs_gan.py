@@ -49,7 +49,7 @@ class BoundarySeekingGAN(AbstractPyTorchNetwork):
 
     def forward(self, x: torch.Tensor, z: torch.Tensor = None):
         if z is None:
-            z = torch.rand(x.shape(0), self._latent_dim, device=x.device,
+            z = torch.randn(x.shape(0), self._latent_dim, device=x.device,
                            dtype=x.dtype)
 
         gen_imgs = self.generator(z)

@@ -35,7 +35,7 @@ class DeepConvolutionalGAN(AbstractPyTorchNetwork):
 
     def forward(self, imgs: torch.Tensor, noise: torch.Tensor = None):
         if noise is None:
-            noise = torch.rand(imgs.size(0), self._latent_dim,
+            noise = torch.randn(imgs.size(0), self._latent_dim,
                                device=imgs.device, dtype=imgs.dtype)
 
         gen_imgs = self.generator(noise)

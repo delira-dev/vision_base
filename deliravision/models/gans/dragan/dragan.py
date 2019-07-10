@@ -72,7 +72,7 @@ class DRAGAN(AbstractPyTorchNetwork):
         """
 
         if noise is None:
-            noise = torch.rand(x.size(0), self._latent_dim, device=x.device,
+            noise = torch.randn(x.size(0), self._latent_dim, device=x.device,
                                dtype=x.dtype)
 
         gen_imgs = self.generator(noise)
@@ -82,11 +82,11 @@ class DRAGAN(AbstractPyTorchNetwork):
 
         if alpha is None:
             # Random weight term for interpolation
-            alpha = torch.rand_like(x)
+            alpha = torch.randn_like(x)
 
         interpolates = (alpha * x
                         + ((1 - alpha) * (x + 0.5 * x.std()
-                                          * torch.rand_like(x))))
+                                          * torch.randn_like(x))))
 
         discr_interpolates = self.discriminator(interpolates)
 

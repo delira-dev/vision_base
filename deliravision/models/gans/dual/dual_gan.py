@@ -84,10 +84,10 @@ class DualGAN(AbstractPyTorchNetwork):
 
         if alpha_a is None:
             # Random weight term for interpolation
-            alpha_a = torch.rand_like(imgs_a)
+            alpha_a = torch.randn_like(imgs_a)
 
         if alpha_b is None:
-            alpha_b = torch.rand_like(imgs_b)
+            alpha_b = torch.randn_like(imgs_b)
 
         interpolates_a = alpha_a * imgs_a + ((1 - alpha_a) * fake_a)
         interpolates_b = alpha_b * imgs_b + ((1 - alpha_b) * fake_b)

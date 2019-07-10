@@ -67,8 +67,8 @@ class GenerativeAdversarialNetworks(AbstractPyTorchNetwork):
 
         """
         if noise is None:
-            noise = torch.rand(imgs.size(0), self._latent_dim,
-                               dtype=imgs.dtype, device=imgs.device)
+            noise = torch.randn(imgs.size(0), self._latent_dim,
+                                dtype=imgs.dtype, device=imgs.device)
 
         gen_imgs = self.generator(noise)
 
