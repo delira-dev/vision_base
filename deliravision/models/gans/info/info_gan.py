@@ -93,7 +93,7 @@ class InfoGAN(AbstractPyTorchNetwork):
 
         if z is None:
             z = torch.randn(imgs.size(0), self._latent_dim, device=imgs.device,
-                           dtype=imgs.dtype)
+                            dtype=imgs.dtype)
 
         if labels is None:
             labels = torch.randint(self._n_classes,
