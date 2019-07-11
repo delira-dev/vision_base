@@ -117,7 +117,7 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
         adv_loss_gen = losses["adversarial"](predictions["discr_encoded"],
                                              True)
         pixel_loss_gen = losses["pixelwise"](predictions["decoded"],
-                                             data_dict["label"])
+                                             data_dict["data"])
 
         total_loss_gen = 0.001 * adv_loss_gen + 0.999 * pixel_loss_gen
 
