@@ -38,6 +38,7 @@ class GradientPenalty(torch.nn.Module):
         weight : float
             weight factor
         """
+        super().__init__()
         self._weight = weight
 
     def forward(self, discr_interpolates: torch.Tensor,
