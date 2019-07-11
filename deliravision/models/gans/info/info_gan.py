@@ -217,7 +217,7 @@ class InfoGAN(AbstractPyTorchNetwork):
         return {
             "data": torch.from_numpy(batch["data"]).to(torch.float).to(
                 input_device),
-            "label": torch.from_numpy(batch["data"]).to(torch.long).to(
+            "label": torch.from_numpy(batch["label"]).to(torch.long).to(
                 input_device
             )
         }
