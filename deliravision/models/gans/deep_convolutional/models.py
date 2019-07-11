@@ -89,7 +89,8 @@ class Discriminator(torch.nn.Module):
         )
 
         # The height and width of downsampled image
-        ds_size = img_size // 2 ** 4
+        ds_size = self.model(torch.rand(1, num_channels, img_size,
+                                        img_size)).size(2)
         self.adv_layer = torch.nn.Sequential(
             torch.nn.Linear(128 * ds_size ** 2, 1), torch.nn.Sigmoid())
 
