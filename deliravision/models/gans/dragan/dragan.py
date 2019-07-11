@@ -87,6 +87,7 @@ class DRAGAN(AbstractPyTorchNetwork):
         interpolates = (alpha * x
                         + ((1 - alpha) * (x + 0.5 * x.std()
                                           * torch.randn_like(x))))
+        interpolates.requires_grad_(True)
 
         discr_interpolates = self.discriminator(interpolates)
 
