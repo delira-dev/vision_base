@@ -49,9 +49,11 @@ class BoundarySeekingGAN(AbstractPyTorchNetwork):
 
     def forward(self, x: torch.Tensor, z: torch.Tensor = None):
         if z is None:
-            z = torch.randn(x.shape(0), self._latent_dim, device=x.device,
-                           dtype=x.dtype)
+            z = torch.randn(x.size(0), self._latent_dim, device=x.device,
+                            dtype=x.dtype)
 
+        # ToDo: Generator Parameters become NaN at some time in first epoch,
+        #  when training with MNIST, but loss doesn't
         gen_imgs = self.generator(z)
 
         discr_real = self.discriminator(x)
@@ -99,15 +101,15 @@ class BoundarySeekingGAN(AbstractPyTorchNetwork):
 
         preds = model(data_dict["data"])
 
-        loss_gen = losses["boundary_seeking"](preds["discr_fake"], True)
+        loss_gen = losses["boundary_seeking"](preds["discr_fake"])
         loss_vals["boundary_seeking_generator"] = loss_gen.item()
 
         optimizers["generator"].zero_grad()
         loss_gen.backward(retain_graph=True)
         optimizers["generator"].step()
 
-        real_loss = losses["discriminator"](preds["discr_real"], True)
-        fake_loss = losses["discriminator"](preds["discr_fake"], True)
+        real_loss = losses["adversarial"](preds["discr_real"], True)
+        fake_loss = losses["adversarial"](preds["discr_fake"], True)
         loss_vals["discr_real"] = real_loss.item()
         loss_vals["discr_fake"] = fake_loss.item()
 
@@ -131,4 +133,5 @@ class BoundarySeekingGAN(AbstractPyTorchNetwork):
 
     @staticmethod
     def prepare_batch(batch: dict, input_device, output_device):
-        return {"data": batch["data"].to(torch.float).to(input_device)}
+        return {"data": torch.from_numpy(batch["data"]
+                                         ).to(torch.float).to(input_device)}
