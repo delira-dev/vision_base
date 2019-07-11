@@ -87,8 +87,7 @@ class ConditionalGAN(AbstractPyTorchNetwork):
                            dtype=x.dtype)
 
         if gen_labels is None:
-            gen_labels = torch.randint(0, self._n_classes, device=x.device,
-                                       dtype=x.dtype)
+            gen_labels = torch.randint_like(labels, 0, self._n_classes)
 
         gen_imgs = self.generator(z, gen_labels)
 
@@ -171,6 +170,8 @@ class ConditionalGAN(AbstractPyTorchNetwork):
 
     @staticmethod
     def prepare_batch(batch: dict, input_device, output_device):
-        return {"data": batch["data"].to(torch.float).to(input_device),
-                "label": batch["label"].to(torch.float).to(output_device)}
+        return {"data": torch.from_numpy(batch["data"]
+                                         ).to(torch.float).to(input_device),
+                "label": torch.from_numpy(batch["label"]
+                                          ).to(torch.long).to(output_device)}
 
