@@ -123,9 +123,9 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
         loss_vals, metric_vals = {}, {}
 
-        predictions = model(data_dict["labels"])
+        predictions = model(data_dict["data"])
 
-        loss_gen = (predictions["discr_fake"]-data_dict["label"]).abs().mean()
+        loss_gen = (predictions["discr_fake"]-data_dict["data"]).abs().mean()
         loss_vals["gen_total"] = loss_gen.item()
 
         optimizers["generator"].zero_grad()
@@ -134,7 +134,7 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
         discr_loss, discr_loss_real, discr_loss_fake = losses["began"](
             predictions["discr_real"],
-            data_dict["label"],
+            data_dict["data"],
             predictions["discr_fake"],
             predictions["gen_imgs"])
 
