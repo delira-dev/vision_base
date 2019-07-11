@@ -238,9 +238,11 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
         optimizers["discriminator"].step()
 
         # calculate accuracy
-        preds = torch.cat(predictions["pred_label_gen"],
-                          predictions["real_aux"], dim=0)
-        gts = torch.cat(predictions["gen_labels"], data_dict["label"], dim=0)
+        preds = torch.cat((predictions["pred_label_gen"],
+                          predictions["real_aux"]), dim=0)
+
+        gts = torch.cat((predictions["gen_labels"][:, None],
+                         data_dict["label"]), dim=0)
 
         acc = (torch.argmax(preds, dim=1) == gts).to(torch.float).mean().item()
 
@@ -256,5 +258,7 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
 
     @staticmethod
     def prepare_batch(batch: dict, input_device, output_device):
-        return {"data": batch["data"].to(torch.float).to(input_device),
-                "label": batch["label"].to(torch.long).to(output_device)}
+        return {"data": torch.from_numpy(batch["data"]
+                                         ).to(torch.float).to(input_device),
+                "label": torch.from_numpy(batch["label"]
+                                          ).to(torch.long).to(output_device)}
