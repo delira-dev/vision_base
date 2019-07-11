@@ -61,10 +61,7 @@ class Generator(torch.nn.Module):
             the image batch
 
         """
-        print(noise.shape)
-        print(labels.shape)
-        print(code.shape)
-        gen_input = torch.cat((noise, labels, code), -1)
+        gen_input = torch.cat((noise, labels.to(noise.dtype), code), -1)
         out = self.l1(gen_input)
         out = out.view(out.shape[0], 128, self.init_size, self.init_size)
         img = self.conv_blocks(out)
