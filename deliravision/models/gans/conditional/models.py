@@ -62,7 +62,7 @@ class Generator(torch.nn.Module):
 
         """
         # Concatenate label embedding and image to produce input
-        gen_input = torch.cat((self.label_emb(labels), noise), -1)
+        gen_input = torch.cat((self.label_emb(labels).squeeze(1), noise), -1)
         img = self.model(gen_input)
         img = img.view(img.size(0), *self._img_shape)
         return img
@@ -119,6 +119,6 @@ class Discriminator(torch.nn.Module):
         """
         # Concatenate label embedding and image to produce input
         d_in = torch.cat((img.view(img.size(0), -1),
-                          self.label_embedding(labels)), -1)
+                          self.label_embedding(labels).squeeze(1)), -1)
         validity = self.model(d_in)
         return validity
