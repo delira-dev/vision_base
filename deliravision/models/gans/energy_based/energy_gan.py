@@ -162,5 +162,5 @@ class EnergyBasedGAN(AbstractPyTorchNetwork):
     def prepare_batch(batch: dict, input_device, output_device):
         return {
             "data":
-                torch.from_numpy(batch["data"].to(torch.float
-                                                  ).to(input_device))}
+                torch.from_numpy(batch["data"]).to(torch.float
+                                                  ).to(input_device)}
