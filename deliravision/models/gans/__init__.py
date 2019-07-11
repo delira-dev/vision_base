@@ -14,6 +14,9 @@ from deliravision.models.gans.dual import *
 from deliravision.models.gans.energy_based import *
 from deliravision.models.gans.esr import *
 from deliravision.models.gans.gan import *
+from deliravision.models.gans.info import *
+from deliravision.models.gans.munit import *
+from deliravision.models.gans.pix2pix import *
 
 # make LSGAN a synonym for basic GAN, since training only differs in loss
 # function, which isn't specified here
