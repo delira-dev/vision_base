@@ -46,7 +46,7 @@ class DRAGAN(AbstractPyTorchNetwork):
 
         self.generator = generator_cls(img_size, latent_dim, num_channels)
         self.discriminator = discriminator_cls(num_channels, img_size)
-        self._latent_dim = None
+        self._latent_dim = latent_dim
 
     def forward(self, x: torch.Tensor, noise: torch.Tensor = None,
                 alpha: torch.Tensor = None):
@@ -73,7 +73,7 @@ class DRAGAN(AbstractPyTorchNetwork):
 
         if noise is None:
             noise = torch.randn(x.size(0), self._latent_dim, device=x.device,
-                               dtype=x.dtype)
+                                dtype=x.dtype)
 
         gen_imgs = self.generator(noise)
 
