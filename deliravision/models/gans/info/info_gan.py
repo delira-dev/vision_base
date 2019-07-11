@@ -188,9 +188,10 @@ class InfoGAN(AbstractPyTorchNetwork):
         loss_discr.backward(retain_graph=True)
         optimizers["discriminator"].step()
 
-        # caculate info losses
-        loss_categorical = losses["categorical"](preds["labels_fake"],
-                                                 preds["label_real"])
+        # calculate info losses
+        loss_categorical = losses["categorical"](
+            preds["labels_fake"],
+            torch.argmax(preds["labels_real"], dim=-1))
 
         loss_continuous = losses["continuous"](preds["code_fake"],
                                                preds["code_real"])
