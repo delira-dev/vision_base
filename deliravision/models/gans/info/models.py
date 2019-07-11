@@ -61,6 +61,9 @@ class Generator(torch.nn.Module):
             the image batch
 
         """
+        print(noise.shape)
+        print(labels.shape)
+        print(code.shape)
         gen_input = torch.cat((noise, labels, code), -1)
         out = self.l1(gen_input)
         out = out.view(out.shape[0], 128, self.init_size, self.init_size)
@@ -105,7 +108,8 @@ class Discriminator(torch.nn.Module):
         )
 
         # The height and width of downsampled image
-        ds_size = img_size // 2 ** 4
+        ds_size = self.conv_blocks(torch.rand(1, num_channels, img_size,
+                                              img_size)).size(2)
 
         # Output layers
         self.adv_layer = torch.nn.Linear(128 * ds_size ** 2, 1)
