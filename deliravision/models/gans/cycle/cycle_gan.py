@@ -190,7 +190,7 @@ class CycleGAN(AbstractPyTorchNetwork):
         })
 
         optimizers["generator"].zero_grad()
-        loss_gen.backward()
+        loss_gen.backward(retain_graph=True)
         optimizers["generator"].step()
 
         loss_real_a = losses["adversarial"](preds["discr_real_a"], True)
