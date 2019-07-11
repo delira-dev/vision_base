@@ -158,4 +158,5 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
     @staticmethod
     def prepare_batch(batch: dict, input_device, output_device):
-        return {"data": batch["data"].to(torch.float).to(input_device)}
+        return {"data": torch.from_numpy(batch["data"]
+                                         ).to(torch.float).to(input_device)}
