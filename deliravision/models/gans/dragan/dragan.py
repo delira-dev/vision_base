@@ -2,6 +2,7 @@ from deliravision.models.gans.dragan.models import Discriminator, Generator
 from delira.models import AbstractPyTorchNetwork
 import torch
 
+from deliravision.models.gans.utils import weights_init_normal
 
 class DRAGAN(AbstractPyTorchNetwork):
     """
@@ -47,6 +48,8 @@ class DRAGAN(AbstractPyTorchNetwork):
         self.generator = generator_cls(img_size, latent_dim, num_channels)
         self.discriminator = discriminator_cls(num_channels, img_size)
         self._latent_dim = latent_dim
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
     def forward(self, x: torch.Tensor, noise: torch.Tensor = None,
                 alpha: torch.Tensor = None):

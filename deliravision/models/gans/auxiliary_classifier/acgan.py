@@ -3,6 +3,7 @@ from deliravision.models.gans.auxiliary_classifier.models import \
 import torch
 
 from delira.models import AbstractPyTorchNetwork
+from deliravision.models.gans.utils import weights_init_normal
 
 
 class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
@@ -113,7 +114,7 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
 
         if noise is None:
             noise = torch.randn(real_imgs.size(0), self._latent_dim,
-                               device=real_imgs.device, dtype=real_imgs.dtype)
+                                device=real_imgs.device, dtype=real_imgs.dtype)
 
         if gen_labels is None:
             gen_labels = torch.randint(0, self._n_classes,
@@ -137,32 +138,13 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
 
         return result_dict
 
-    @staticmethod
-    def weight_init_normal(m):
-        """
-        Static function to initialize the trainable parameters
-
-        Parameters
-        ----------
-        m : :class:`torch.nn.Module`
-            the current module to initialize
-
-        """
-
-        classname = m.__class__.__name__
-        if classname.find("Conv") != -1:
-            torch.nn.init.normal_(m.weight.data, 0.0, 0.02)
-        elif classname.find("BatchNorm2d") != -1:
-            torch.nn.init.normal_(m.weight.data, 1.0, 0.02)
-            torch.nn.init.constant_(m.bias.data, 0.0)
-
     def reset_parameters(self):
         """
         Function to reset the parameters of generator and discriminator
 
         """
-        self.generator.apply(self.weight_init_normal)
-        self.discriminator.apply(self.weight_init_normal)
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
     @staticmethod
     def closure(model, data_dict: dict, optimizers: dict, losses=None,
@@ -239,7 +221,7 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
 
         # calculate accuracy
         preds = torch.cat((predictions["pred_label_gen"],
-                          predictions["real_aux"]), dim=0)
+                           predictions["real_aux"]), dim=0)
 
         gts = torch.cat((predictions["gen_labels"][:, None],
                          data_dict["label"]), dim=0)

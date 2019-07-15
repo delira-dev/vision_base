@@ -2,6 +2,7 @@ import torch
 from delira.models import AbstractPyTorchNetwork
 from deliravision.models.gans.info.models import Discriminator, Generator
 from deliravision.utils.tensor_ops import make_onehot_torch
+from deliravision.models.gans.utils import weights_init_normal
 
 
 class InfoGAN(AbstractPyTorchNetwork):
@@ -67,6 +68,9 @@ class InfoGAN(AbstractPyTorchNetwork):
 
         self.lambda_cat = lambda_cat
         self.lambda_cont = lambda_cont
+
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
     def forward(self, imgs, labels=None, z=None, code=None):
         """

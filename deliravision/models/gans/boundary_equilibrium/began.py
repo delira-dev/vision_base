@@ -3,6 +3,7 @@ from deliravision.models.gans.boundary_equilibrium.models import \
     Generator, Discriminator
 
 import torch
+from deliravision.models.gans.utils import weights_init_normal
 
 
 class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
@@ -53,6 +54,9 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
 
         self.discriminator = discriminator_cls(n_channels=n_channels,
                                                img_size=img_size)
+
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
         self._latent_dim = latent_dim
 

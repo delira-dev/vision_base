@@ -3,6 +3,7 @@ import torch
 from deliravision.models.gans.deep_convolutional.models import Generator, \
     Discriminator
 
+from deliravision.models.gans.utils import weights_init_normal
 
 class DeepConvolutionalGAN(AbstractPyTorchNetwork):
     """
@@ -32,6 +33,8 @@ class DeepConvolutionalGAN(AbstractPyTorchNetwork):
         self.discriminator = discriminator_cls(num_channels, img_size)
 
         self._latent_dim = latent_dim
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
     def forward(self, imgs: torch.Tensor, noise: torch.Tensor = None):
         if noise is None:

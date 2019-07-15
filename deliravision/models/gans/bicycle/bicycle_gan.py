@@ -10,7 +10,7 @@ class BiCycleGAN(AbstractPyTorchNetwork):
     See Also
     --------
     `Paper <https://arxiv.org/abs/1711.11586>`_
-    
+
     Warnings
     --------
     This Network is designed for training only; if you want to predict from an
