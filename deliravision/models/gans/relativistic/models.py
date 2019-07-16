@@ -2,7 +2,22 @@ import torch
 
 
 class Generator(torch.nn.Module):
+    """
+    A generative network
+    """
     def __init__(self, img_size, num_channels, latent_dim):
+        """
+
+        Parameters
+        ----------
+        img_size : int
+            number of pixels per side of the generated image
+        num_channels : int
+            number of channels to generate
+        latent_dim : int
+            size of the latent dimension
+
+        """
         super().__init__()
 
         self.init_size = img_size // 4
@@ -23,6 +38,20 @@ class Generator(torch.nn.Module):
         )
 
     def forward(self, z):
+        """
+        Feeds a batch of noise through the network and generates images from it
+
+        Parameters
+        ----------
+        z : :class:`torch.Tensor`
+            the noise batch
+
+        Returns
+        -------
+        :class:`torch.Tensor`
+            the resulting image batch
+
+        """
         out = self.l1(z)
         out = out.view(out.shape[0], 128, self.init_size, self.init_size)
         img = self.conv_blocks(out)
@@ -30,7 +59,20 @@ class Generator(torch.nn.Module):
 
 
 class Discriminator(torch.nn.Module):
+    """
+    A discriminative network
+    """
     def __init__(self, num_channels, img_size):
+        """
+
+        Parameters
+        ----------
+        num_channels : int
+            number of image channels
+        img_size : int
+            number of pixels per side of the input images
+
+        """
         super().__init__()
 
         def discriminator_block(in_filters, out_filters, bn=True):
@@ -54,6 +96,21 @@ class Discriminator(torch.nn.Module):
         self.adv_layer = torch.nn.Linear(128 * ds_size ** 2, 1)
 
     def forward(self, img):
+        """
+        Feeds a batch of images through the network to infer their validity
+        (whether they were generated or are real images)
+
+        Parameters
+        ----------
+        img : :class:`torch.Tensor`
+            the image batch
+
+        Returns
+        -------
+        :class:`torch.Tensor`
+            the image batch
+
+        """
         out = self.model(img)
         out = out.view(out.shape[0], -1)
         validity = self.adv_layer(out)
