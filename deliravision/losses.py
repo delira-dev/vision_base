@@ -45,6 +45,7 @@ class GradientPenalty(torch.nn.Module):
                 interpolates: torch.Tensor):
         """
         Computes the gradient penalty
+
         Parameters
         ----------
         discr_interpolates : :class:`torch.Tensor`
