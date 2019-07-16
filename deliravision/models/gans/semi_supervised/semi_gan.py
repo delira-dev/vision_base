@@ -59,6 +59,22 @@ class SemiSupervisedGAN(AbstractPyTorchNetwork):
         self._n_classes = num_classes
 
     def forward(self, x, z=None):
+        """
+        Feeds a single set of batches through the network
+
+        Parameters
+        ----------
+        x : :class:`torch.Tensor`
+            the image batch
+        z : :class:`torch.Tensor`
+
+        Returns
+        -------
+        dict
+            a dictionary containing all the (intermediate) results necessary
+            for loss calculation and training
+
+        """
 
         if z is None:
             z = torch.randn(x.size(0), self._latent_dim, device=x.device,
