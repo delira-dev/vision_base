@@ -1,5 +1,5 @@
 from delira.models import AbstractPyTorchNetwork
-from deliravision.models.gans.esr.models import Discriminator, GeneratorRRDB, \
+from deliravision.models.gans.enhanced_super_resolution.models import Discriminator, GeneratorRRDB, \
     FeatureExtractor
 import torch
 

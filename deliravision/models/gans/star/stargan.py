@@ -240,9 +240,3 @@ class StarGAN(AbstractPyTorchNetwork):
             "label": torch.from_numpy(batch["data"]).squeeze(-1).to(
                 torch.long).to(input_device)
         }
-
-
-
-
-
-
