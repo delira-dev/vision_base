@@ -23,6 +23,10 @@ from deliravision.models.gans.semi_supervised import *
 from deliravision.models.gans.softmax import *
 from deliravision.models.gans.star import *
 from deliravision.models.gans.super_resolution import *
+from deliravision.models.gans.unit import *
+from deliravision.models.gans.wasserstein import *
+from deliravision.models.gans.wasserstein_gp import *
+from deliravision.models.gans.wasserstein_div import *
 
 # make LSGAN a synonym for basic GAN, since training only differs in loss
 # function, which isn't specified here
