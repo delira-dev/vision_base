@@ -93,8 +93,9 @@ class WassersteinGAN(AbstractPyTorchNetwork):
         Clips the discriminators parameters to the range
         [``-clip_val``, ``clip_val``]
         """
+
         for p in self.discriminator.parameters():
-            p.clamp_(-self._clip_val, self._clip_val)
+            p.detach().clamp_(-self._clip_val, self._clip_val)
 
     @property
     def update_gen(self):
@@ -164,22 +165,22 @@ class WassersteinGAN(AbstractPyTorchNetwork):
 
         update_gen = attr_module.update_gen
 
-        loss_d = preds["discr_fake"].mean() - preds["discr_real"].mean()
-        loss_vals["discriminator"] = loss_d.item()
-
-        optimizers["discriminator"].zero_grad()
-        loss_d.backward(retain_graph=update_gen)
-        optimizers["discriminator"].step()
-
-        attr_module.clip_parameters()
-
         loss_gen = -preds["discr_fake"].mean()
         loss_vals["generator"] = loss_gen.item()
 
         if update_gen:
             optimizers["generator"].zero_grad()
-            loss_gen.backward()
+            loss_gen.backward(retain_graph=True)
             optimizers["generator"].step()
+
+        loss_d = preds["discr_fake"].mean() - preds["discr_real"].mean()
+        loss_vals["discriminator"] = loss_d.item()
+
+        optimizers["discriminator"].zero_grad()
+        loss_d.backward()
+        optimizers["discriminator"].step()
+
+        attr_module.clip_params()
 
         # zero gradients again just to make sure, gradients aren't carried to
         # next iteration (won't affect training since gradients are zeroed
