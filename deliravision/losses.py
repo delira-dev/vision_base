@@ -31,15 +31,6 @@ class GradientPenalty(torch.nn.Module):
     """
     A module to compute the gradient penalty
     """
-    def __init__(self, weight=10.):
-        """
-        Parameters
-        ----------
-        weight : float
-            weight factor
-        """
-        super().__init__()
-        self._weight = weight
 
     def forward(self, discr_interpolates: torch.Tensor,
                 interpolates: torch.Tensor):
@@ -70,7 +61,7 @@ class GradientPenalty(torch.nn.Module):
             only_inputs=True
         )[0]
 
-        return self._weight * ((gradients.norm(p=2, dim=1) - 1) ** 2).mean()
+        return ((gradients.norm(p=2, dim=1) - 1) ** 2).mean()
 
 
 class PullAwayLoss(torch.nn.Module):

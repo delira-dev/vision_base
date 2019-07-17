@@ -25,7 +25,7 @@ class DRAGAN(AbstractPyTorchNetwork):
     all necessary (intermediate) outputs for training.
 
     """
-    def __init__(self, latent_dim, num_channels, img_size,
+    def __init__(self, latent_dim, num_channels, img_size, lambda_gp=10.,
                  generator_cls=Generator, discriminator_cls=Discriminator):
         """
 
@@ -37,6 +37,8 @@ class DRAGAN(AbstractPyTorchNetwork):
             number of channels for image generation and discrimination
         img_size : int
             number of pixels per image side
+        lambda_gp : float
+            weighting factor for gradient penalty
         generator_cls :
             class implementing the actual generator topology
         discriminator_cls :
@@ -50,6 +52,7 @@ class DRAGAN(AbstractPyTorchNetwork):
         self._latent_dim = latent_dim
         self.generator.apply(weights_init_normal)
         self.discriminator.apply(weights_init_normal)
+        self.lambda_gp = lambda_gp
 
     def forward(self, x: torch.Tensor, noise: torch.Tensor = None,
                 alpha: torch.Tensor = None):
@@ -135,6 +138,11 @@ class DRAGAN(AbstractPyTorchNetwork):
 
         loss_vals, metric_vals = {}, {}
 
+        if isinstance(model, torch.nn.DataParallel):
+            lambda_gp = model.module.lambda_gp
+        else:
+            lambda_gp = model.lambda_gp
+
         preds = model(data_dict["data"])
 
         gen_loss = losses["adversarial"](preds["discr_fake"], True)
@@ -153,7 +161,7 @@ class DRAGAN(AbstractPyTorchNetwork):
         gradient_penalty = losses["gradient_penalty"](
             preds["discr_interpolates"], preds["interpolates"])
 
-        discr_loss = (fake_loss + real_loss) / 2 + gradient_penalty
+        discr_loss = (fake_loss + real_loss) / 2 + gradient_penalty * lambda_gp
         loss_vals["discriminator"] = discr_loss.item()
 
         optimizers["discriminator"].zero_grad()
