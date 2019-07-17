@@ -73,7 +73,8 @@ class RelativisticGAN(AbstractPyTorchNetwork):
 
         """
         if z is None:
-            z = torch.randn(x.size(0), self._latent_dim)
+            z = torch.randn(x.size(0), self._latent_dim, device=x.device,
+                            dtype=x.dtype)
 
         gen_imgs = self.generator(z)
 
