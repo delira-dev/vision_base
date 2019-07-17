@@ -1,3 +1,6 @@
+import torch
+
+
 def weights_init_normal(m):
     classname = m.__class__.__name__
     if classname.find("Conv") != -1:
