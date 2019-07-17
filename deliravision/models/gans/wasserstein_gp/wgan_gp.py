@@ -84,7 +84,8 @@ class WassersteinGradientPenaltyGAN(AbstractPyTorchNetwork):
                             dtype=x.dtype)
 
         if alpha is None:
-            alpha = torch.rand(x.size(0), 1, 1, 1)
+            alpha = torch.rand(x.size(0), 1, 1, 1, device=x.device,
+                               dtype=x.dtype)
 
         gen_imgs = self.generator(z)
 

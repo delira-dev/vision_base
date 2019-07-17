@@ -147,6 +147,9 @@ class WassersteinDivergenceGAN(AbstractPyTorchNetwork):
         else:
             attr_module = model
 
+        # explicitly setting this to True is necessary to being able to
+        # calculate gradients for Wasserstein Divergence
+        data_dict["data"].requires_grad_(True)
         preds = model(data_dict["data"])
 
         update_gen = attr_module.update_gen

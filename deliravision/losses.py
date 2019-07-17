@@ -318,10 +318,12 @@ class WassersteinDivergence(torch.nn.Module):
             the wasserstein divergence
 
         """
+
         real_grad = torch.autograd.grad(
             real_val, real_imgs, torch.ones(real_imgs.size(0), 1,
                                             device=real_imgs.device,
-                                            dtype=real_imgs.dtype),
+                                            dtype=real_imgs.dtype,
+                                            requires_grad=True),
             create_graph=True, retain_graph=True, only_inputs=True
         )[0]
 
@@ -330,8 +332,9 @@ class WassersteinDivergence(torch.nn.Module):
         fake_grad = torch.autograd.grad(
             fake_val, fake_imgs, torch.ones(fake_imgs.size(0), 1,
                                             device=fake_imgs.device,
-                                            dtype=fake_imgs.dtype),
-            create_graph=True, retain_graph=True, only_inputs=True
+                                            dtype=fake_imgs.dtype,
+                                            requires_grad=True),
+            create_graph=True, retain_graph=True, only_inputs=True,
         )[0]
 
         fake_grad_norm = fake_grad.norm(p=self._p)
