@@ -6,7 +6,7 @@ from delira.models import AbstractPyTorchNetwork
 import torch
 
 
-class WassersteinGANGradientPenalty(AbstractPyTorchNetwork):
+class WassersteinGradientPenaltyGAN(AbstractPyTorchNetwork):
     """
     Class implementing Improved Training of Wasserstein GANs
 
