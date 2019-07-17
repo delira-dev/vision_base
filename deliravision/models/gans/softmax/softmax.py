@@ -139,7 +139,7 @@ class SoftmaxGAN(AbstractPyTorchNetwork):
         g_loss.backward(retain_graph=True)
         optimizers["generator"].step()
 
-        d_loss = d_target * preds["d_real"].sum() + (part_fn + 1e-8).log()
+        d_loss = d_target * preds["discr_real"].sum() + (part_fn + 1e-8).log()
         loss_vals["discriminator"] = d_loss.item()
 
         optimizers["discriminator"].zero_grad()
