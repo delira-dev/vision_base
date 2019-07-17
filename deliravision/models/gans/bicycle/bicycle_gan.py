@@ -7,8 +7,14 @@ import torch
 class BiCycleGAN(AbstractPyTorchNetwork):
     """
     A PyTorch Impelementation of the bycicle GAN
-    See Also
-    --------
+
+    It consists of a generator learning to map the given input (combined with
+    its latent code) to the output while explicitly encouraging the connection
+    between output and latent code to be invertible to prevent mode collapse
+    and to produce more diverse results.
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1711.11586>`_
 
     Warnings

@@ -12,8 +12,8 @@ class CycleGAN(AbstractPyTorchNetwork):
     unsupervised domain transfer with exchangeable generator and discriminator
     topologies
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1606.07536>`_
 
     Warnings

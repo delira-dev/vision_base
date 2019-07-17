@@ -11,8 +11,12 @@ class BoundaryEquilibriumGAN(AbstractPyTorchNetwork):
     A basic implementation of Boundary Equilibrium Generative Adversarial
     Networks with variable generator and discriminator networks
 
-    See Also
-    --------
+    This GAN is trained with a loss derived from the Wasserstein disctance
+    enforcing a equilibrium of generator and discriminator during training.
+
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1703.10717>`_
 
     Warnings

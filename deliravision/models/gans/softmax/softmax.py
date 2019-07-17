@@ -9,8 +9,8 @@ class SoftmaxGAN(AbstractPyTorchNetwork):
     """
     Class implementing Softmax GAN
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1704.06191>`_
 
     Warnings

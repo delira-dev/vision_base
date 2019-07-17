@@ -77,8 +77,8 @@ class PullAwayLoss(torch.nn.Module):
     """
     Pull Away Loss for the Energy-Based GANs
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1609.03126>`_
 
     """
@@ -125,7 +125,7 @@ class DiscriminatorMarginLoss(torch.nn.Module):
     A loss whose calculation switches slightly depending on a calculated
     margin.
 
-    See Also
+    References
     --------
     `Paper <https://arxiv.org/abs/1609.03126>`_
 

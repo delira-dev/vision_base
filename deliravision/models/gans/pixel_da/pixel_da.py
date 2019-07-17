@@ -13,8 +13,8 @@ class PixelDomainAdaptation(AbstractPyTorchNetwork):
     Class implementing the Unsupervised Pixel-Level Domain Adaptation with
     Generative Adversarial Networks
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1612.05424>`_
 
     Warnings

@@ -11,8 +11,8 @@ class WassersteinGAN(AbstractPyTorchNetwork):
     Class implementing Wasserstein Generative Adversarial Networks to
     prevent mode collapse
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1701.07875>`_
 
     Warnings

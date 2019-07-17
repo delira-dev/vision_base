@@ -10,8 +10,8 @@ class RelativisticGAN(AbstractPyTorchNetwork):
         Class implementing generative adversarial networks with relative
         discriminators
 
-        See Also
-        --------
+        References
+        ----------
         `Paper <https://arxiv.org/abs/1807.00734>`_
 
         Warnings

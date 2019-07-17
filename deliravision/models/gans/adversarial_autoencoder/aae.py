@@ -10,8 +10,13 @@ class AdversarialAutoEncoderPyTorch(AbstractPyTorchNetwork):
     Class implementing the Combined Adversarial Autoencoder and it's behavior
     during training.
 
-    See Also
-    --------
+    An adversarial autoencoder is basically aprobabilistic autoencoder that
+    uses generative adversarial networks (GAN) to perform variational inference
+    by matching the aggregated posterior of the hidden code vector of the
+    autoencoder with an arbitrary prior distribution
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1511.05644>`_
 
     Warnings

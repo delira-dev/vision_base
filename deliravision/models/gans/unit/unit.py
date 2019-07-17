@@ -10,8 +10,8 @@ class UNIT(AbstractPyTorchNetwork):
     """
     Class implementing Unsupervised Image-to-Image Translation Networks
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1703.00848>`_
 
     Warnings

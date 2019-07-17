@@ -10,8 +10,8 @@ class DiscoGAN(AbstractPyTorchNetwork):
     cross-domain relations in image synthesis with exchangeable generator and
     discriminator classes
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1703.05192>`_
 
     Warnings

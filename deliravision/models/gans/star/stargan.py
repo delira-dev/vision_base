@@ -9,8 +9,8 @@ class StarGAN(AbstractPyTorchNetwork):
     Class implementing StarGAN: Unified Generative Adversarial Networks for
     Multi-Domain Image-to-Image Translation
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1711.09020>`_
 
     Warnings

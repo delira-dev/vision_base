@@ -10,8 +10,8 @@ class MUNIT(AbstractPyTorchNetwork):
     Class implementing the
     Multimodal Unsupervised Image-to-Image Translation
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1804.04732>`_
 
     Warnings

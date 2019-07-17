@@ -10,8 +10,8 @@ class WassersteinDivergenceGAN(AbstractPyTorchNetwork):
     """
     Class implementing Wasserstein Divergence for GANs
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1712.01026>`_
 
     Warnings

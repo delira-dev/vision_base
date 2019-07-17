@@ -8,10 +8,10 @@ from deliravision.models.gans.coupled.models import CoupledDiscriminators, \
 class CoupledGAN(AbstractPyTorchNetwork):
     """
     An implementation of of coupled generative adversarial networks, which are
-    capable of generating images with the same content in different domains
+    capable of generating images with the same content in different domains.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1606.07536>`_
 
     Warnings

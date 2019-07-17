@@ -9,8 +9,8 @@ class DRAGAN(AbstractPyTorchNetwork):
     Implementation of Generative Adversarial Networks following the convergence
     and stability guidance of ``On Convergence and Stability of GANs``
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1705.07215>`_
 
     Warnings

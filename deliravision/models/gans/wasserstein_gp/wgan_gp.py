@@ -10,8 +10,8 @@ class WassersteinGradientPenaltyGAN(AbstractPyTorchNetwork):
     """
     Class implementing Improved Training of Wasserstein GANs
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1704.00028>`_
 
     Warnings

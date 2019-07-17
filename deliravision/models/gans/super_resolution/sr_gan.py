@@ -10,8 +10,8 @@ class SuperResolutionGAN(AbstractPyTorchNetwork):
     Class implementing Photo-Realistic Single Image Super-Resolution
     Using a Generative Adversarial Network
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1609.04802>`_
 
     Warnings

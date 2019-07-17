@@ -8,8 +8,8 @@ class DualGAN(AbstractPyTorchNetwork):
     Class implementing the Dual Generative Adversarial Networks and their
     behavior during training.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1704.02510>`_
 
     Warnings

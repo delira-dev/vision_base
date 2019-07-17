@@ -10,8 +10,8 @@ class InfoGAN(AbstractPyTorchNetwork):
     Class implementing the
     Information Maximization Generative Adversarial Networks.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1606.03657>`_
 
     Warnings

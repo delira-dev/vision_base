@@ -9,8 +9,8 @@ class EnergyBasedGAN(AbstractPyTorchNetwork):
     Class implementing the Energy-Based GANs and it's behavior
     during training.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1609.03126>`_
 
     Warnings

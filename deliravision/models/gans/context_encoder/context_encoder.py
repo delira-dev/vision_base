@@ -10,8 +10,12 @@ class ContextEncoder(AbstractPyTorchNetwork):
     Skeleton for Context Encoding Generative Adversarial Networks with
     exchangeable Generator and Discriminator classes
 
-    See Also
-    --------
+    This GAN is suitable for unsupervised visual feature learning driven by
+    context-based pixel prediction and empowers an unsupervised training
+    approach based on in-painting.
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1604.07379>`_
 
     Warnings

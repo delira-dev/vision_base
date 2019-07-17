@@ -10,8 +10,8 @@ class DeepConvolutionalGAN(AbstractPyTorchNetwork):
     Implementation of Deep Convolutional Generative Adversarial Networks for
     image synthesis with exchangeable generator and discriminator classes
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1511.06434>`_
 
     Warnings

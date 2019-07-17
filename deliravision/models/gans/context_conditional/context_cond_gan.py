@@ -9,8 +9,11 @@ class ContextConditionalGAN(AbstractPyTorchNetwork):
     Skeleton for Context Conditional Generative Adversarial Networks with
     exchangeable Generator and Discriminator classes
 
-    See Also
-    --------
+    This GAN version is suitable for in-painting using a semi-supervised
+    training approach.
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1611.06430>`_
 
     Warnings

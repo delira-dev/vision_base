@@ -10,8 +10,8 @@ class SemiSupervisedGAN(AbstractPyTorchNetwork):
     Class implementing Semi-Supervised Learning with Generative Adversarial
     Networks
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1606.01583>`_
 
     Warnings

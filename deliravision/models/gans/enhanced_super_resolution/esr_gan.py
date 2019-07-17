@@ -9,8 +9,8 @@ class EnhancedSuperResolutionGAN(AbstractPyTorchNetwork):
     Class implementing the
     Enhanced Super Resolution Generative Adversarial Networks.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1809.00219>`_
 
     Warnings

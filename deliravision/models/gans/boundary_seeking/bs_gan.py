@@ -9,8 +9,12 @@ class BoundarySeekingGAN(AbstractPyTorchNetwork):
     A Basic Implementation of the boundary seeking generative adversarial
     networks with variable generator and discriminator class
 
-    See Also
-    --------
+    This GAN derivate is trained by applying policy gradients to the generator
+    to make it working with non-differentiable, discrete data. It also
+    improves stability of training in continuous data.
+
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1702.08431>`_
 
     Warnings

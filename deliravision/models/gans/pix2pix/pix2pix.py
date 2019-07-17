@@ -10,8 +10,8 @@ class Pix2Pix(AbstractPyTorchNetwork):
     Class implementing the
     Image-to-Image Translation with Conditional Adversarial Networks
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1611.07004>`_
 
     Warnings

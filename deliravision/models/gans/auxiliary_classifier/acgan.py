@@ -10,8 +10,8 @@ class AuxiliaryClassifierGANPyTorch(AbstractPyTorchNetwork):
     """
     A Generative Adversarial Network employing classification as auxiliary task
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1610.09585>`_
 
     Warnings

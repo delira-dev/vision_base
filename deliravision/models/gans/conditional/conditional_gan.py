@@ -8,10 +8,10 @@ class ConditionalGAN(AbstractPyTorchNetwork):
     """
     An implementation of conditional generative adversarial networks, which
     are capable of generating samples of specific classes by providing the
-    class label
+    class label.
 
-    See Also
-    --------
+    References
+    ----------
     `Paper <https://arxiv.org/abs/1411.1784>`_
 
     Warnings
