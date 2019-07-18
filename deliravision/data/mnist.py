@@ -36,6 +36,8 @@ class MNIST(ImageFolder, Downloadable):
         remove : bool
             whether to remove the downlaoded data after processing it
         """
+        root = os.path.join(root, "MNIST")
+
         if train:
             root = os.path.join(root, "train")
         else:
