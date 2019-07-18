@@ -1,4 +1,7 @@
-from delira import get_backends
+from deliravision.data.base_datasets import ImageFolder, Downloadable
+import os
+import gzip
+import tarfile
 
 IMAGENETTE_URLS = {
     "full": "https://s3.amazonaws.com/fast-ai-imageclas/imagenette.tgz",
@@ -12,57 +15,155 @@ IMAGEWOOF_URLS = {
     "160px": "https://s3.amazonaws.com/fast-ai-imageclas/imagewoof-160.tgz"
 }
 
-if "TORCH" in get_backends():
 
-    from .torchvision_classification import TorchVisionImageFolder
-    from torchvision.datasets.utils import download_url
-    import tarfile
-    import os
+class ImageNette(ImageFolder, Downloadable):
+    """
+    The Imagenette Dataset is a 10-class imagenet-subset of relatively easy
+    distinguishable classes
 
-    def process_url(url, dst, name, remove_file=True):
-        _target_dir = os.path.join(dst, name.rsplit(".", 1)[0])
+    See Also
+    --------
+    :class:`deliravision.data.base_datasets.ImageFolder`
+        the Image Folder, this class is implemented upon.
+    :class:`deliravision.data.imagenette.ImageWoof`
+        a harder 10-class imagenet subset
 
-        # download file if dataset does not exist
-        if not (os.path.isdir(_target_dir) or
-                os.path.isfile(os.path.join(dst, name))):
-            download_url(url, dst, name)
+    References
+    ----------
+    https://github.com/fastai/imagenette
 
-        # extract file if dir does not exist
-        if not os.path.isdir(_target_dir):
+    """
 
-            with tarfile.open(os.path.join(dst, name)) as f:
-                _target_dir = os.path.join(dst, name.rsplit(".")[0])
-                os.makedirs(_target_dir, exist_ok=True)
-                f.extractall(_target_dir)
+    def __init__(self, root="/tmp", resolution="full", train=True,
+                 download=True, remove=False):
+        """
 
-        # remove file if flag specified and file exists
-        if remove_file and os.path.isfile(os.path.join(dst, name)):
-            os.remove(os.path.join(dst, name))
+        Parameters
+        ----------
+        root : str
+            the path, all data should be placed in;
+            will be created if not yet existing
+        resolution : str
+            a string specifying the subset to load, this can be one of the
+            following: 'full' | '320px' | '160px'
+        train : bool
+            whether to load the trainset or the testset
+        download : bool
+            whether to download the dataset; This will be only done, if it
+            wasn't downlaoded already
+        remove : bool
+            whether to remove the downlaoded data after processing it
+        """
+        assert resolution in ("full", "320px", "160px")
+        self.resolution = resolution
+        root = os.path.join(root, self.name, str(self.resolution))
 
-        return os.path.join(_target_dir, os.listdir(_target_dir)[0])
+        Downloadable.__init__(self, path=root, download=download,
+                              remove=remove)
+
+        root = os.path.join(root, "processed", self.name.lower())
+
+        if train:
+            root = os.path.join(root, "train")
+        else:
+            root = os.path.join(root, "val")
+
+        ImageFolder.__init__(self, path=root)
+
+    @property
+    def name(self):
+        """
+        Property to specify the datasets name
+
+        Returns
+        -------
+        str
+            the name
+        """
+        return "ImageNette"
+
+    @property
+    def urls(self) -> dict:
+        """
+        Property returning the URLs to download the data if necessary based on
+        the specified resolution
+
+        Returns
+        -------
+        dict
+            a combination of URLs and filenames
+        """
+        return {IMAGENETTE_URLS[self.resolution]:
+                    "imagenette_%s.tgz" % self.resolution}
+
+    def preprocess_data(self, download_path, prep_path):
+        """
+        Function to preprocess the downloaded data
+
+        Parameters
+        ----------
+        download_path : str
+            the path containing the downloaded data
+        prep_path : str
+            the path the preprocessed data should be stored in
+
+        """
+        fname = list(self.urls.values())[0]
+        with gzip.open(os.path.join(download_path, fname)) as gfile:
+            with open(os.path.join(download_path,
+                                   fname.replace(".tgz", ".tar")), "wb") as f:
+                f.write(gfile.read())
+
+        with tarfile.TarFile(os.path.join(download_path,
+                                          fname.replace(".tgz", ".tar"))
+                             ) as tfile:
+            tfile.extractall(prep_path)
 
 
-    class ImageNette(TorchVisionImageFolder):
-        def __init__(self, split, size="full", root="/tmp/", one_hot=False,
-                     load_fn=None, remove=True):
+class ImageWoof(ImageNette):
+    """
+    The ImageWoof Dataset is a 10-class imagenet-subset of relatively hard +
+    (compared to Imagenette) distinguishable classes
 
-            dset_dir = process_url(IMAGENETTE_URLS[size], root,
-                                   "ImageNette_%s.tgz" % size,
-                                   remove_file=remove)
+    See Also
+    --------
+    :class:`deliravision.data.base_datasets.ImageFolder`
+        the Image Folder, this class is implemented upon.
+    :class:`deliravision.data.imagenette.ImageNette`
+        a harder 10-class imagenet subset
 
-            data_dir = os.path.join(dset_dir, split)
+    References
+    ----------
+    https://github.com/fastai/imagenette
 
-            super().__init__(data_dir, one_hot=one_hot, load_fn=load_fn)
+    """
+
+    @property
+    def name(self):
+        """
+        Property to specify the datasets name
+
+        Returns
+        -------
+        str
+            the name
+        """
+        return "ImageWoof"
+
+    @property
+    def urls(self) -> dict:
+        """
+        Property returning the URLs to download the data if necessary based on
+        the specified resolution
+
+        Returns
+        -------
+        dict
+            a combination of URLs and filenames
+        """
+        return {IMAGEWOOF_URLS[self.resolution]:
+                "imagewoof_%s.tgz" % self.resolution}
+
+            
 
 
-    class ImageWoof(TorchVisionImageFolder):
-        def __init__(self, split, size="full", root="/tmp/", one_hot=False,
-                     load_fn=None, remove=True):
-
-            dset_dir = process_url(IMAGENETTE_URLS[size], root,
-                                   "ImageWoof_%s.tgz" % size,
-                                   remove_file=remove)
-
-            data_dir = os.path.join(dset_dir, split)
-
-            super().__init__(data_dir, one_hot=one_hot, load_fn=load_fn)
