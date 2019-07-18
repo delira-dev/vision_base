@@ -50,7 +50,7 @@ deliravision_version = find_version(os.path.join(os.path.dirname(__file__),
                                                  "deliravision", "__init__.py"))
 
 setup(
-    name='delira',
+    name='deliravision',
     version=deliravision_version,
     packages=find_packages(),
     url='https://github.com/justusschock/delira-vision',

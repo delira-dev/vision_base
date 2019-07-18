@@ -15,6 +15,13 @@ class MNIST(ImageFolder, Downloadable):
     --------
     :class:`deliravision.data.base_datasets.ImageFolder`
         the Image Folder, this class is implemented upon.
+    :class:`deliravision.mnist.KMNIST`
+        the Kuzushiji-MNIST dataset
+    :class:`deliravision.mnist.EMNIST`
+        the extended MNIST dataset
+    :class:`deliravision.mnist.FashionMNIST`
+        the FashionMNIST dataset
+
 
     References
     ----------
@@ -80,8 +87,7 @@ class MNIST(ImageFolder, Downloadable):
 
         self._to_image_folder(images, labels, prep_path)
 
-    @staticmethod
-    def _to_image_folder(images, labels, prep_path):
+    def _to_image_folder(self, images, labels, prep_path):
         """
         Helper Function, which writes the given images and labels to the given
         path in a way, they can be read by the
@@ -101,7 +107,9 @@ class MNIST(ImageFolder, Downloadable):
         # counter for each class
         label_idxs = {}
         for img, label in zip(images, labels):
-            label = str(label)
+            label = int(label)
+
+            label = self.class_names[label]
 
             # set counter for class to zero and create dir for class if first
             # item of this class
@@ -227,6 +235,11 @@ class MNIST(ImageFolder, Downloadable):
         """
         return "MNIST"
 
+    @property
+    def class_names(self):
+        return ("zero", "one", "two", "three", "four", "five", "six", "seven",
+                "eight", "nine")
+
 
 class FashionMNIST(MNIST):
     """
@@ -240,7 +253,7 @@ class FashionMNIST(MNIST):
         the original MNIST dataset
     :class:`deliravision.mnist.KMNIST`
         the Kuzushiji-MNIST dataset
-    :class:`deliravision.mnist.MNIST`
+    :class:`deliravision.mnist.EMNIST`
         the extended MNIST dataset
 
     References
@@ -291,6 +304,11 @@ class FashionMNIST(MNIST):
                 "t10k-labels-idx1-ubyte.gz"
         }
 
+    @property
+    def class_names(self):
+        return ("tshirt", "trouser", "pullover", "dress", "coat", "sandal",
+                "shirt", "sneaker", "bag", "ankle_boot")
+
 
 class KMNIST(MNIST):
     """
@@ -304,7 +322,7 @@ class KMNIST(MNIST):
         the original MNIST dataset
     :class:`deliravision.mnist.FashionMNIST`
         the FashionMNIST dataset
-    :class:`deliravision.mnist.MNIST`
+    :class:`deliravision.mnist.EMNIST`
         the extended MNIST dataset
 
     References
@@ -355,6 +373,10 @@ class KMNIST(MNIST):
             "t10k-labels-idx1-ubyte.gz":
                 "t10k-labels-idx1-ubyte.gz"
         }
+
+    @property
+    def class_names(self):
+        return tuple(str(i) for i in range(10))
 
 
 class EMNIST(MNIST):
@@ -464,3 +486,25 @@ class EMNIST(MNIST):
                           % (self.split, train_str),
                 "labels": "emnist-%s-%s-labels-idx1-ubyte.gz"
                           % (self.split, train_str)}
+
+    @property
+    def class_names(self):
+        uppercase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+                     "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
+                     "W", "X", "Y", "Z"]
+        digits = [str(i) for i in range(10)]
+        lowercase = [i.lowercase() for i in uppercase]
+
+        merged = (digits + uppercase +
+                  ["a", "b", "d", "e", "f", "g", "h", "n", "q", "r", "t"])
+
+        cls_names = {
+            "mnist": digits,
+            "balanced": merged,
+            "bymerge": merged,
+            "byclass": digits + uppercase + lowercase,
+            "digits": digits,
+            "letters": uppercase
+        }
+
+        return cls_names[self.split]
