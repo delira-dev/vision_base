@@ -1,2 +1,4 @@
 delira
 wget
+delira>=0.3.1
+

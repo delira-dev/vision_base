@@ -4,7 +4,6 @@ if "TORCH" in get_backends():
 
     import torch
 
-
     class ConvWrapper(torch.nn.Module):
         """
         Convolution Wrapper to Switch accross dimensions and transposed by a
@@ -13,7 +12,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Convolutions:
+        Torch Convolutions:
 
             * :class:`torch.nn.Conv1d`
 
@@ -30,7 +29,7 @@ if "TORCH" in get_backends():
         """
         def __init__(self, n_dim, in_channels, out_channels, kernel_size,
                      stride=1, padding=0, dilation=1, groups=1, bias=True,
-                     transposed=False):
+                     transposed=False, **kwargs):
             """
 
             Parameters
@@ -68,10 +67,10 @@ if "TORCH" in get_backends():
 
             conv_cls = getattr(torch.nn, "Conv%s%dd" % (transposed_str, n_dim))
 
-            self._conv = conv_cls(
+            self.conv = conv_cls(
                 in_channels=in_channels, out_channels=out_channels,
                 kernel_size=kernel_size, stride=stride, padding=padding,
-                dilation=dilation, groups=groups, bias=bias)
+                dilation=dilation, groups=groups, bias=bias, **kwargs)
 
         def forward(self, x: torch.Tensor):
             """
@@ -88,7 +87,7 @@ if "TORCH" in get_backends():
                 the convolved input
 
             """
-            return self._conv(x)
+            return self.conv(x)
 
 
     class PoolingWrapper(torch.nn.Module):
@@ -99,7 +98,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Pooling Classes:
+        Torch Pooling Classes:
 
             * :class:`torch.nn.MaxPool1d`
 
@@ -154,7 +153,7 @@ if "TORCH" in get_backends():
 
             pool_cls = getattr(torch.nn, "%sPool%dd" % (pooling_type, n_dim))
 
-            self._pool = pool_cls(*args, **kwargs)
+            self.pool = pool_cls(*args, **kwargs)
 
         def forward(self, x: torch.Tensor):
             """
@@ -171,7 +170,7 @@ if "TORCH" in get_backends():
                 the pooled input
 
             """
-            return  self._pool(x)
+            return  self.pool(x)
 
 
     class NormWrapper(torch.nn.Module):
@@ -182,7 +181,7 @@ if "TORCH" in get_backends():
         See Also
         --------
 
-        PyTorch Normalizations:
+        Torch Normalizations:
 
                 * :class:`torch.nn.BatchNorm1d`
 
@@ -238,7 +237,7 @@ if "TORCH" in get_backends():
                 dim_str = str(n_dim)
 
             norm_cls = getattr(torch.nn, "%sNorm%sd" % (norm_type, dim_str))
-            self._norm = norm_cls(*args, **kwargs)
+            self.norm = norm_cls(*args, **kwargs)
 
         def forward(self, x: torch.Tensor):
             """
@@ -255,4 +254,15 @@ if "TORCH" in get_backends():
                 the normalized input
 
             """
-            return self._norm(x)
+            return self.norm(x)
+
+
+    class DropoutWrapper(torch.nn.Module):
+        def __init__(self, n_dim, p=0.5, inplace=False):
+            super().__init__()
+            dropout_cls = getattr(torch.nn, "Dropout%dd" % n_dim)
+            self.dropout = dropout_cls(p=p, inplace=inplace)
+
+        def forward(self, x):
+            return self.dropout(x)
+

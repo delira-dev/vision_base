@@ -58,7 +58,8 @@ setup(
     long_description=readme,
     long_description_content_type='text/markdown',
     license=license,
-    install_requires=requirements,
+    # default: Use TORCH Backend
+    install_requires=requirements + requirements_extra_torch,
     tests_require=["coverage"],
     python_requires=">=3.5",
     extras_require={
