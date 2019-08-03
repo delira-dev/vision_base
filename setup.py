@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 import os
 import re
+import versioneer
 
 
 def resolve_requirements(file):
@@ -23,48 +24,25 @@ def read_file(file):
     return content
 
 
-def find_version(file):
-    content = read_file(file)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", content,
-                              re.M)
-    if version_match:
-        return version_match.group(1)
-
-
 requirements = resolve_requirements(os.path.join(os.path.dirname(__file__),
                                                  'requirements.txt'))
 
-requirements_extra_full = []
-
-requirements_extra_torch = resolve_requirements(os.path.join(
-    os.path.dirname(__file__), 'requirements_extra_torch.txt'))
-requirements_extra_full += requirements_extra_torch
-
-requirements_extra_tf = resolve_requirements(os.path.join(
-    os.path.dirname(__file__), 'requirements_extra_tf.txt'))
-requirements_extra_full += requirements_extra_tf
-
 readme = read_file(os.path.join(os.path.dirname(__file__), "README.md"))
 license = read_file(os.path.join(os.path.dirname(__file__), "LICENSE"))
-deliravision_version = find_version(os.path.join(os.path.dirname(__file__),
-                                                 "deliravision", "__init__.py"))
 
 setup(
     name='deliravision',
-    version=deliravision_version,
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
-    url='https://github.com/justusschock/delira-vision',
+    url='https://github.com/delira-dev/vision',
     test_suite="unittest",
     long_description=readme,
     long_description_content_type='text/markdown',
     license=license,
-    # default: Use TORCH Backend
-    install_requires=requirements + requirements_extra_torch,
+    install_requires=requirements,
     tests_require=["coverage"],
     python_requires=">=3.5",
-    extras_require={
-        "full": requirements_extra_full,
-        "torch": requirements_extra_torch,
-        "tf": requirements_extra_tf
-    }
+    maintainer="Michael Baumgartner",
+    maintainer_email="michael.baumgartner@rwth-aachen.de",
 )
