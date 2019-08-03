@@ -27,7 +27,7 @@ class ImageNet(ImageFolder, Downloadable):
     def urls(self) -> dict:
         train_str = "train" if self.train else "val"
         return {IMAGENET_URLS[train_str]:
-                    "ILSVRC2012_img_%s.tar" % train_str,
+                "ILSVRC2012_img_%s.tar" % train_str,
                 IMAGENET_URLS["devkit"]: "ILSVRC2012_devkit_t12.tar.gz"}
 
     def preprocess_data(self, download_path, prep_path):

@@ -13,13 +13,13 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 
+from deliravision._version import get_versions
 import os
 import sys
 import re
 
 # source code directory, relative to this file, for sphinx-build
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
-from deliravision._version import get_versions
 
 # -- Project information -----------------------------------------------------
 

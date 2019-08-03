@@ -35,6 +35,7 @@ class Downloadable:
     """
     API definition and download code for downloadable items
     """
+
     def __init__(self, path, download=True, remove=False):
         """
 
@@ -121,6 +122,7 @@ class DataFolder(ClassificationDataset):
     The given path must contain subdirs and the items in each subdir will be
     considered as items of one class.
     """
+
     def __init__(self, path, load_fn, extensions: tuple):
         """
 
@@ -297,6 +299,7 @@ class ImageFolder(DataFolder):
     :class:`MedicalImageFolder`
         image folder loading the most common medical image types
     """
+
     def __init__(self, path):
         """
 
@@ -344,6 +347,7 @@ class MedicalImageFolder(DataFolder):
     :class:`ImageFolder`
         image folder loading the most common non-medical image types
     """
+
     def __init__(self, path):
         """
 
@@ -371,6 +375,7 @@ class Lazy2Cache(AbstractDataset):
     For large datasets, this may take a while.
     Also your machine may run out of memory or become extremely slow.
     """
+
     def __init__(self, dataset, n_jobs=None):
         """
 

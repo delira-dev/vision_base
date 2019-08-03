@@ -32,8 +32,8 @@ class TestBackbones(unittest.TestCase):
             })
             test_cases.append({
                 "network_cls": AlexNetTorch,
-                "network_kwargs": {"num_classes":1000, "in_channels":3,
-                                   "n_dim":2, "pool_type":"Max"},
+                "network_kwargs": {"num_classes": 1000, "in_channels": 3,
+                                   "n_dim": 2, "pool_type": "Max"},
                 "input_shape": (5, 3, 224, 224),
                 "name": "AlexNet"
             })
@@ -263,4 +263,3 @@ if __name__ == '__main__':
     from multiprocessing import freeze_support
     freeze_support()
     unittest.main()
-

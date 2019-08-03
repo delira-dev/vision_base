@@ -94,7 +94,7 @@ class ImageNette(ImageFolder, Downloadable):
             a combination of URLs and filenames
         """
         return {IMAGENETTE_URLS[self.resolution]:
-                    "imagenette_%s.tgz" % self.resolution}
+                "imagenette_%s.tgz" % self.resolution}
 
     def preprocess_data(self, download_path, prep_path):
         """
@@ -163,7 +163,3 @@ class ImageWoof(ImageNette):
         """
         return {IMAGEWOOF_URLS[self.resolution]:
                 "imagewoof_%s.tgz" % self.resolution}
-
-            
-
-

@@ -15,6 +15,7 @@ class STL10(ImageFolder, Downloadable):
     ----------
     https://cs.stanford.edu/~acoates/stl10/
     """
+
     def __init__(self, root="/tmp", split="train", download=True,
                  remove=False):
         """
@@ -121,7 +122,7 @@ class STL10(ImageFolder, Downloadable):
             class_names = f.readlines()
 
         if labels is None:
-            labels = tuple([None]*len(images))
+            labels = tuple([None] * len(images))
 
         prep_path = os.path.join(prep_path, self.split)
 

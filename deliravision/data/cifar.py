@@ -10,6 +10,7 @@ class _CifarDataset(ImageFolder, Downloadable):
     """
     Basic Dataset for the CIFAR10 and CIFAR100 Datasets
     """
+
     def __init__(self, cifar_type, root="/tmp", train=True, download=True,
                  remove=False):
         """
@@ -143,6 +144,7 @@ class CIFAR10(_CifarDataset):
     http://www.cs.toronto.edu/~kriz/cifar.html
 
     """
+
     def __init__(self, root="/tmp", train=True, download=True, remove=False):
         """
 
@@ -179,6 +181,7 @@ class CIFAR100(_CifarDataset):
     http://www.cs.toronto.edu/~kriz/cifar.html
 
     """
+
     def __init__(self, root="/tmp", train=True, download=True, remove=False):
         """
 

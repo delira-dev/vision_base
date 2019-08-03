@@ -28,6 +28,7 @@ class MNIST(ImageFolder, Downloadable):
     http://yann.lecun.com/exdb/mnist/
 
     """
+
     def __init__(self, root="/tmp", train=True, download=True, remove=False):
         """
 
@@ -399,6 +400,7 @@ class EMNIST(MNIST):
     https://www.westernsydney.edu.au/bens/home/reproducible_research/emnist
 
     """
+
     def __init__(self, root="/tmp", train=True, split="balanced",
                  download=True, remove=False):
         assert split in ('balanced', 'byclass', 'bymerge', 'digits', 'letters',

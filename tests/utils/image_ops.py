@@ -39,7 +39,10 @@ class ImageOpTest(unittest.TestCase):
             self.assertAlmostEqual(_offset, _target_offset)
 
     def test_max_energy_slice(self):
-        slice_idx = max_energy_slice(sitk.GetImageFromArray(np.array(self._img)))
+        slice_idx = max_energy_slice(
+            sitk.GetImageFromArray(
+                np.array(
+                    self._img)))
         self.assertIn(slice_idx, [23, 24])
 
     def test_copy_metadata(self):
@@ -72,7 +75,9 @@ class ImageOpTest(unittest.TestCase):
         resampled_img = sitk_resample_to_image(
             src_img, sitk.GetImageFromArray(np.array(self._img)))
 
-        self.assertTupleEqual(resampled_img.GetSize(), np.array(self._img).shape)
+        self.assertTupleEqual(
+            resampled_img.GetSize(), np.array(
+                self._img).shape)
         self.assertTupleEqual(resampled_img.GetSpacing(), (1., 1., 1.))
 
     def test_resample_to_shape(self):

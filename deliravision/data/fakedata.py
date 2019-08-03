@@ -6,6 +6,7 @@ class ClassificationFakeData(ClassificationDataset):
     """
     Dataset generating consistent random fake data for classification purposes
     """
+
     def __init__(self, num_samples=1000, img_size=(3, 224, 224),
                  num_classes=10, rng_offset=0):
         """

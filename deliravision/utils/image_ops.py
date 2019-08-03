@@ -20,7 +20,7 @@ def calculate_origin_offset(new_spacing, old_spacing):
     np.ndarray
         origin offset
     """
-    return np.subtract(new_spacing, old_spacing)/2
+    return np.subtract(new_spacing, old_spacing) / 2
 
 
 @sitk_img_func
@@ -102,9 +102,11 @@ def sitk_resample_to_image(image, reference_image, default_value=0.,
     return resample_filter.Execute(image)
 
 
-def sitk_new_blank_image(shape, spacing=(1., 1., 1.),
-                         direction=(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0),
-                         origin=(0., 0., 0.), default_value=0.):
+def sitk_new_blank_image(
+    shape, spacing=(
+        1., 1., 1.), direction=(
+            1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0), origin=(
+                0., 0., 0.), default_value=0.):
     """
     Create a new blank image with given properties
     Parameters
