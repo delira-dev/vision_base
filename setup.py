@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 
 import os
 import re
-import versioneer
 
 
 def resolve_requirements(file):
@@ -32,8 +31,6 @@ license = read_file(os.path.join(os.path.dirname(__file__), "LICENSE"))
 
 setup(
     name='deliravision-base',
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     url='https://github.com/delira-dev/vision',
     test_suite="unittest",
