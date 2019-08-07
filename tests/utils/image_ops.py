@@ -1,8 +1,9 @@
 import unittest
 import numpy as np
 import SimpleITK as sitk
-from deliravision.utils.image_ops import bounding_box, calculate_origin_offset, \
-    max_energy_slice, sitk_copy_metadata, sitk_new_blank_image, \
+from deliravision.utils.image_ops import bounding_box, \
+    calculate_origin_offset, max_energy_slice, \
+    sitk_copy_metadata, sitk_new_blank_image, \
     sitk_resample_to_image, sitk_resample_to_shape, sitk_resample_to_spacing
 
 

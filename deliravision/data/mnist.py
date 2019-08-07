@@ -497,8 +497,8 @@ class EMNIST(MNIST):
         digits = [str(i) for i in range(10)]
         lowercase = [i.lowercase() for i in uppercase]
 
-        merged = (digits + uppercase +
-                  ["a", "b", "d", "e", "f", "g", "h", "n", "q", "r", "t"])
+        merged = (digits + uppercase + ["a", "b", "d", "e", "f", "g",
+                                        "h", "n", "q", "r", "t"])
 
         cls_names = {
             "mnist": digits,
