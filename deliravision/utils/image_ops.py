@@ -138,29 +138,47 @@ def sitk_new_blank_image(
 
 
 @sitk_img_func
-def sitk_resample_to_shape(img, shape, order=1):
+def sitk_resample_to_shape(img, x, y, z, order=1):
     """
     Resamples Image to given shape
-
     Parameters
     ----------
     img : SimpleITK.Image
-    shape : list, tuple, array-like
-        the target shape
+    x : int
+        shape in x-direction
+    y : int
+        shape in y-direction
+    z : int
+        shape in z-direction
     order : int
         interpolation order
-
     Returns
     -------
     SimpleITK.Image
         Resampled Image
-
     """
-    img_np = sitk.GetArrayFromImage(img)
-    img_np_fixed_size = zoom(img_np,
-                             np.array(shape) / np.array(img_np.shape),
-                             order=order)
-    return sitk.GetImageFromArray(img_np_fixed_size)
+    if img.GetSize() != (x, y, z):
+        img_np = sitk.GetArrayFromImage(img)
+        zoom_fac_z = z / img_np.shape[0]
+        zoom_fac_y = y / img_np.shape[1]
+        zoom_fac_x = x / img_np.shape[2]
+        img_np_fixed_size = zoom(img_np,
+                                 [zoom_fac_z,
+                                  zoom_fac_y,
+                                  zoom_fac_x],
+                                 order=order)
+        img_resampled = sitk.GetImageFromArray(img_np_fixed_size)
+        img_resampled = sitk_copy_metadata(img, img_resampled)
+        img_resampled.SetDirection(img.GetDirection())
+        img_resampled.SetOrigin(img.GetOrigin())
+
+        spacing_x = img.GetSpacing()[0] * (1 + 1 - (zoom_fac_x))
+        spacing_y = img.GetSpacing()[1] * (1 + 1 - (zoom_fac_y))
+        spacing_z = img.GetSpacing()[2] * (1 + 1 - (zoom_fac_z))
+        img_resampled.SetSpacing((spacing_x, spacing_y, spacing_z))
+        return img_resampled
+    else:
+        return img
 
 
 @sitk_img_func
